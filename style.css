@@ -6,8 +6,9 @@ html, body {
     flex-flow: row;
     align-items: flex-start;
     overflow: hidden;
-    background-color: rgb(245, 242, 239);
 }
+
+
 
 .column {
     height: 100%;
@@ -16,81 +17,6 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#menu {
-    height: 85%;
-    width: 100%;
-    margin: 5em;
-    background: rgb(233, 233, 233);
-    border-radius: 1em;
-    display: flex;
-    flex-flow: column;
-    padding: 1em;
-}
-
-.buttons button:nth-child(odd) {
-    margin-right: 0.5em;
-}
-
-#menu button {
-    width: 100%;
-    border: none;
-    font-size: 1.25em;
-    padding: 1em;
-}
-
-.buttons {
-    display: flex;
-    align-items: center;
-    flex-flow: row;
-}
-
-#menu button:hover {
-    cursor: pointer;
-    background: #cacaca;
-    transition-duration: 0.3s;
-}
-
-#menu button:focus {
-    outline: 0;
-}
- 
-#menu button:active {
-    outline: 0;
-    background: #929292;
-    transition-duration: 0.3s;
-}
-
-#menu h1 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    text-align: center;
-    font-size: 2.5em;
-    margin: 0.5em;
-}
-
-#menu p {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    text-align: center;
-    font-style: italic;
-    margin: 0;
-}
-
-#log p {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    text-align: left;
-    font-style: normal;
-    margin: 0.5em 0 0.5em 1em;
-}
-
-#log {
-    overflow: scroll;
-    overflow-x: hidden;
-    padding: 0.5em 0 0.5em 0;
-    width: 100%;
-    margin: 1em 0 1em 0;
-    height: 75%;
-    background: white;
 }
 
 #board {
@@ -102,7 +28,7 @@ html, body {
     justify-content: center;
 }
 
-#menu, .tiles {
+.tiles {
     box-shadow: 0 0 1em 0.25em rgba(121, 121, 121, 0.75);
 }
 
@@ -141,7 +67,7 @@ html, body {
     flex: 0.5;
 }
 
-.white:hover {
+.blue:hover {
     cursor: pointer;
 }
 
@@ -189,11 +115,11 @@ html, body {
     transition-duration: 0.3s;
 }
 
-.black, .white {
+.red, .blue {
     transition-duration: 0.3s;
 }
 
-.black {
+.red {
     background: radial-gradient(circle, rgb(235, 57, 57), rgb(228, 52, 90));
     box-shadow: inset 0 0 0 0.3em rgb(235, 139, 160);
 }
@@ -203,102 +129,14 @@ html, body {
     transition-duration: 0.3s;
 }
 
-.white:hover {
+.blue:hover {
     box-shadow: inset 0 0 0 0.4em #d3f1f3;
     transition-duration: 0.3s;
 }
 
-.white {
+.blue {
     background: radial-gradient(circle, rgb(67, 133, 233), rgb(67, 133, 233));
     box-shadow: inset 0 0 0 0.3em rgb(134, 178, 243);
 }
 
-.tooltiptext {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    visibility: hidden;
-    width: 45px;
-    background-color: rgba(29, 29, 29, 0.65);
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    margin-top: 28px;
-    padding: 5px 0;
-    position: absolute;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.4s;
-    user-select: none;
-    pointer-events: none
-}
 
-.tile:hover .tooltiptext {
-    visibility: visible;
-    transition-delay: 0.55s;
-    opacity: 1;
-}
-
-#outerMessageBox {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    display: flex;
-}
-
-#messagebox {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1.5em;
-    background-color: rgba(29, 29, 29, 0.9);
-    color: #fff;
-    border-radius: 0.5em;
-    margin: auto;
-    width: 45%;
-}
-
-.messageBoxWithHeader {
-    width: 50% !important;
-}
-
-.messageBoxWithHeader h1 {
-    text-align: center;
-    margin: 0.5em 1em 0.5em 1em;
-}
-
-.messageBoxWithHeader ul {
-    margin: auto;
-    margin: 0 1.5em 1.5em 0.5em;
-}
-
-.okbutton {
-    width: 100%;
-    border: none;
-    border-radius: 0 0 0.5em 0.5em;
-    font-size: 1em;
-    padding: 0.5em;
-}
-
-.okbutton:hover {
-    cursor: pointer;
-    background: #cacaca;
-    transition-duration: 0.3s;
-}
-
-.okbutton:focus {
-    outline: 0;
-}
-
-.okbutton:active {
-    outline: 0;
-    background: #929292;
-    transition-duration: 0.3s;
-}
-
-#messagebox p {
-    user-select: none;
-    text-align: center;
-    margin: 1.5em;
-}
-
-.beenhereallalong {
-    box-shadow: inset 0 0 0.75em 0.25em red;
-    transition-duration: 0.3s;
-}

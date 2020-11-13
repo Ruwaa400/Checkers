@@ -66,6 +66,7 @@ class Board {
                 // tile.addEventListener('click', gameManager.Select);
 
                 line.appendChild(tile);
+                this.board.tiles[tilesCount] = [tile, row, col];
                 tilesCount++;
 
                 //cheker
@@ -76,14 +77,14 @@ class Board {
                 //checker.addEventListener('click', this.Select);
 
                 if (this.board[row][col] === 1) {
-                    checker.classList.add('black');
+                    checker.classList.add('red');
                     tile.appendChild(checker);
-                    //this.board.checkers[chekersCount] = [+row, +col];
+                    this.board.checkers[chekersCount] = [checker, row, col];
                     chekersCount++;
                 } else if (this.board[row][col] === 2) {
-                    checker.classList.add('white');
+                    checker.classList.add('blue');
                     tile.appendChild(checker);
-                    //this.board.checkers[chekersCount] = [+row, +col];
+                    this.board.checkers[chekersCount] = [checker, row, col];
                     chekersCount++;
                 }
             }
