@@ -139,4 +139,31 @@ html, body {
     box-shadow: inset 0 0 0 0.3em rgb(134, 178, 243);
 }
 
+button {
+    display: flex;
+    align-items: center;
+    flex-flow: row;
+    margin: 3ch;
+}
+
+button {
+    padding: 0;
+    border-color: gray;
+    color: black;
+    background-color: rgb(238, 240, 241);
+    cursor: pointer;
+    
+    padding: 10px 20px;
+    border-radius: 15px;
+  }
+  
+  button:focus {
+    outline: 0;
+  }
+
+button:hover {
+    cursor: pointer;
+    background: #cacaca;
+    transition-duration: 0.3s;
+}
 

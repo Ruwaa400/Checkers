@@ -1,6 +1,6 @@
-let board;
+let currBoard;
 
 window.onload = () => {
-    board = new Board();
-    console.log(board.board);
+    currBoard = new Board();
+    console.log(currBoard.board);
 };

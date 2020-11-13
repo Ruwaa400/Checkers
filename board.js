@@ -1,4 +1,46 @@
 
+class Move{
+    constructor(pastPosition, nextPosition, checkerID) {
+        this.pastPosition = pastPosition;
+        this.nextPosition = nextPosition;
+        this.checker = checkerID;
+    };
+};
+
+class Tile{
+    constructor(board, obj, location) {
+        this.board = board;
+        this.obj = obj;
+        this.location = location;
+
+        //can only play on black tiles
+        if( (this.position[0] + this.position[1])%2 ){
+            this.available = true;
+        }
+        else{
+            this.available = false;
+        }
+    };
+    
+};
+
+class Checker{
+    constructor(board, ele, location) {
+        this.board = board;
+        this.element = ele;
+        this.location = location;
+        this.lastMove;
+        this.king = false;
+        // who has the checker
+        if (this.element.getAttribute('id') < 15) {
+            this.player = 1;
+        } else {
+            this.player = 2;
+        }
+    };
+    
+};
+
 class Board {
     
     constructor() {
@@ -6,6 +48,11 @@ class Board {
         this.board = this.Init();
         this.tiles = [];
         this.checkers = [];
+        this.redKings = 0;
+        this.blueKings = 0;
+        this.redTiles = 15;
+        this.blueTiles = 15;
+
         this.DrawBoard();
     };
 
@@ -48,7 +95,7 @@ class Board {
     };
 
     DrawBoard() {
-        let tiles = document.querySelector('div.tiles');
+        let tilesDiv = document.querySelector('div.tiles');
         let tilesCount = 0;
         let chekersCount = 0;
 
@@ -65,8 +112,8 @@ class Board {
                 // the function needs implementation
                 // tile.addEventListener('click', gameManager.Select);
 
-                line.appendChild(tile);
-                this.board.tiles[tilesCount] = [tile, row, col];
+                line.appendChild(tile); 
+                this.tiles[tilesCount] = new Tile(this.board, tile, [+row,+col]);
                 tilesCount++;
 
                 //cheker
@@ -79,17 +126,17 @@ class Board {
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
-                    this.board.checkers[chekersCount] = [checker, row, col];
+                    this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
                     chekersCount++;
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
-                    this.board.checkers[chekersCount] = [checker, row, col];
+                    this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
                     chekersCount++;
                 }
             }
 
-            tiles.appendChild(line);
+            tilesDiv.appendChild(line);
         }
     };
 };
