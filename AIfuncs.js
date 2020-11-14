@@ -6,12 +6,23 @@ let tem = passBoard();
 //}
 
 //AI player 1 red
-function AInextMove(){
- //check if game eneded
-//check if forced jump first
+//board object
+function AInextMove(board){
+ //check if game eneded in another function that calls the move
+//check if forced jump first //no need //implemented in findmoves function 
 //if no forced jump find optimal move
-alphabeta(tem, 6, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
 
+    let maxValue = Number.NEGATIVE_INFINITY;
+    let nextMove;
+    let children = board.findMoves(1);
+    for (let child in children) {
+        let v = alphabeta(board, child, 5,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
+        if( v > maxValue ){
+            maxValue = v;
+            nextMove = child;
+        }
+    }    
+    return nextMove;
 }
 
 //usign  15F
@@ -40,7 +51,11 @@ function evaluate(board){
 }
 
 //function findmoves not implemented yet
-function alphabeta(board, depth, alpha, beta, maxiplayer){
+function alphabeta(board, move, depth, alpha, beta, maxiplayer){
+    //make move
+    board.lastMove = move;
+    board.makeMove(move, maxiplayer+1);
+
     if (depth == 0 || board.noMoreMoves(maxiplayer)){
         return evaluate(board);
     }
@@ -48,7 +63,7 @@ function alphabeta(board, depth, alpha, beta, maxiplayer){
         let v = Number.NEGATIVE_INFINITY
         let children = board.findMoves(maxiplayer+1);
         for (let child in children) {
-            v = Math.max(v,alphabeta(child, depth-1, alpha, beta, false));
+            v = Math.max(v,alphabeta(board, child, depth-1, alpha, beta, false));
             alpha = Math.max(alpha, v);
             if( beta <= alpha ){
                 break;
@@ -60,7 +75,7 @@ function alphabeta(board, depth, alpha, beta, maxiplayer){
         let v = Number.POSITIVE_INFINITY
         let children = board.findMoves(maxiplayer+1);
         for (let child in children) {
-            v = Math.min(v,alphabeta(child, depth-1, alpha, beta, true));
+            v = Math.min(v,alphabeta(board, child, depth-1, alpha, beta, true));
             alpha = Math.min(alpha, v);
             if( beta <= alpha ){
                 break;

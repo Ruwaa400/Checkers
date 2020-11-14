@@ -1,9 +1,10 @@
 
 class Move{
-    constructor(pastlocation, nextlocation, checkerID) {
+    constructor(pastlocation, nextlocation, checkerID, jump) {
         this.pastlocation = pastlocation;
         this.nextlocation = nextlocation;
-        this.checker = checkerID;
+        this.checkerID = checkerID;
+        this.jump = jump;
     };
 };
 
@@ -25,12 +26,13 @@ class Tile{
 };
 
 class Checker{
-    constructor(board, ele, location) {
-        this.board = board;
+    constructor(board, ele, location, ID) {
+        this.board = board; //just the array
         this.element = ele;
         this.location = location;
         this.king = false;
         this.movable = false;
+        this.ID = ID;
         // who has the checker
         if (this.element.getAttribute('id') < 12) {
             this.player = 1;
@@ -38,6 +40,61 @@ class Checker{
             this.player = 2;
         }
     };
+
+    movable(player){
+        let opp = (player == 1? 2 : 1);
+        let row = this.location[0];
+        let col = this.location[1];
+        //can only go down
+        if(player == 1 || this.king){
+            //down left
+            if( row < 7 && col > 0 && (this.board[row+1][col-1] == 0) ){
+                return true;
+            }
+            //down right
+            if( row < 7 && col < 7 && (this.board[row+1][col+1] == 0) ){
+                return true;
+            }
+            //if there's jump
+            //down left
+            if( row < 6 && col > 1 && (this.board[row+1][col-1] == opp) ){
+                if(this.board[row+2][col-2] == 0){
+                    return true;
+                }
+            }
+            //down right
+            if( row < 6 && col < 6 && (this.board[row+1][col+1] == opp) ){
+                if(this.board[row+2][col+2] == 0){
+                    return true;
+                }
+            }
+        }
+        else if( player == 2 || this.king){
+            //top left
+            if( row > 0 && col > 0 && (this.board[row-1][col-1] == 0) ){
+                return true;
+            }
+            //top right
+            if( row > 0 && col > 0 && (this.board[row-1][col+1] == 0) ){
+                return true;
+            }
+            //if there's jump
+            //top left
+            if( row > 1 && col > 1 && (this.board[row-1][col-1] == opp) ){
+                if(this.board[row-2][col-2] == 0){
+                    return true;
+                }
+            }
+            //top right
+            if( row > 1 && col > 1 && (this.board[row-1][col+1] == opp) ){
+                if(this.board[row-2][col+2] == 0){
+                    return true;
+                }
+            }
+       
+        }
+        return false;
+    }
     
 };
 
@@ -166,21 +223,156 @@ class Board {
 
     }
 
-    
+
     findMoves(player){
         //return array of moves
+        let finalMvs = [];
         let mvs = [];
+        let mvsCount = 0;
+        let opp = (player == 1? 2 : 1);
         for(let piece in this.checkers){
             if(piece.player == player && piece.movable){
+
+                //moving left jump or no jump down
+                if( piece.location[1] > 0 && piece.location[0] < 7){
+                    if(this.board[ piece.location[0] + 1 ][ piece.location[1] - 1 ] == 0){
+                        mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 1 , piece.location[1] - 1 ], piece.ID, false);
+                        mvsCount++;
+                    }
+                    else if(piece.location[1] > 1 && piece.location[0] < 6){
+                        if((this.board[ piece.location[0] + 1 ][ piece.location[1] - 1 ] == opp) && (this.board[ piece.location[0] + 2 ][ piece.location[1] - 2 ] == 0)){
+                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 2 , piece.location[1] - 2 ], piece.ID, true);
+                            mvsCount++;
+                        }
+                    }
+                }
                 
-                
+                //moving right down
+                if( piece.location[1] < 7 && piece.location[0] < 7){
+                    if(this.board[ piece.location[0] + 1 ][ piece.location[1] + 1 ] == 0){
+                        mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 1 , piece.location[1] + 1 ], piece.ID, false);
+                        mvsCount++;
+                    }
+                    else if(piece.location[1] < 6 && piece.location[0] < 6){
+                        if((this.board[ piece.location[0] + 1 ][ piece.location[1] + 1 ] == opp) && (this.board[ piece.location[0] + 2 ][ piece.location[1] + 2 ] == 0)){
+                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 2 , piece.location[1] + 2 ], piece.ID, true);
+                            mvsCount++;
+                        }
+                    }
+                }
+                //two additional direction up right and up left
+                if(piece.king){
+                    //moving up left
+                    if( piece.location[1] > 0 && piece.location[0] > 0){
+                        if(this.board[ piece.location[0] - 1 ][ piece.location[1] - 1 ] == 0){
+                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 1 , piece.location[1] - 1 ], piece.ID, false);
+                            mvsCount++;
+                        }
+                        else if(piece.location[1] > 1 && piece.location[0] > 1){
+                            if((this.board[ piece.location[0] - 1 ][ piece.location[1] - 1 ] == opp) && (this.board[ piece.location[0] - 2 ][ piece.location[1] - 2 ] == 0)){
+                                mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 2 , piece.location[1] - 2 ], piece.ID, true);
+                                mvsCount++;
+                            }
+                        }
+                    }
+                    
+                    //moving up right 
+                    if( piece.location[1] < 7 && piece.location[0] > 0){
+                        if(this.board[ piece.location[0] - 1 ][ piece.location[1] + 1 ] == 0){
+                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 1 , piece.location[1] + 1 ], piece.ID, false);
+                            mvsCount++;
+                        }
+                        else if(piece.location[1] < 6 && piece.location[0] > 1){
+                            if((this.board[ piece.location[0] - 1 ][ piece.location[1] + 1 ] == opp) && (this.board[ piece.location[0] - 2 ][ piece.location[1] + 2 ] == 0)){
+                                mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 2 , piece.location[1] + 2 ], piece.ID, true);
+                                mvsCount++;
+                            }
+                        }
+                    }
+
+                }
             }
         }
 
-
-
+        //if theres jumps dont include other moves
+        let fCount = 0;
+        let flag = false; //is false return mvs as it is 
+        for(let t in mvs){
+            if ( t.jump ){
+                finalMvs[fCount] = t;
+                flag = true;
+            }
+        }
+        if ( flag ){
+            return finalMvs;
+        }
+        return mvs;
     }
 
+    makeMove(move, player){
+        //need to update checkers list, checker king status and movable attribute, and if there's kings
+        //remove checker by setting player 0
+        //updat board list
+        this.lastMove = move;
+        this.board[move.pastlocation[0]][move.pastlocation[1]] = 0;
+        this.board[move.nextlocation[0]][move.nextlocation[1]] = player;
+        this.checkers[move.checkerID].location = [move.nextlocation[0], move.nextlocation[1]];
+        
+        //check if killed king to remove count , not implemented
+
+        //check if checker movable 
+        this.checkers[move.checkerID].movable = this.checkers[move.checkerID].movable(player);
+
+        //updating king count and status
+        if(!this.checkers[move.checkerID].king && (move.nextlocation[0] == 0 || move.nextlocation[0] == 7)){
+            this.checkers[move.checkerID].king = true;
+            if(player == 1){
+                this.board.redKings++;
+            }
+            else{
+                this.board.blueKings++;
+            }
+        }
+        if(move.jump){
+            if(player == 1){
+                this.board.blueTiles--;
+            }
+            else{
+                this.board.redTiles--;
+            }
+            //king case going up
+            if(move.pastlocation[0] > move.nextlocation[0]){
+                //left
+                if(move.pastlocation[1] > move.nextlocation[1]){
+                    this.board[move.pastlocation[0]-1][move.pastlocation[1]-1] = 0;
+                }
+                //right
+                else{
+                    this.board[move.pastlocation[0]-1][move.pastlocation[1]+1] = 0;
+                }
+
+            }
+            //going down
+            else{
+                if(move.pastlocation[1] > move.nextlocation[1]){
+                    this.board[move.pastlocation[0]+1][move.pastlocation[1]-1] = 0;
+                }
+                else{
+                    this.board[move.pastlocation[0]+1][move.pastlocation[1]+1] = 0;
+                }
+
+            }               
+        }
+
+
+        
+    }
+       
+    // 0 1 0 1 0 0    0,3 -> 2,1 jump 1,2 down left
+    // 0 0 2 0 2 0    0,3 -> 2,5 jump 1,4 down right
+    // 0 0 0 1 0 0    4,3 -> 2,1 jump 3,2 up left
+    // 0 0 2 0 2 0    4,3 -> 2,5 jump 3,4 up right
+    // 0 1 0 1 0 0
 
     DrawBoard() {
         let tilesDiv = document.querySelector('div.tiles');
@@ -214,21 +406,21 @@ class Board {
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
-                    let tem = new Checker(this.board, checker, [+row,+col])
-                    chekersCount++;
+                    let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
                     if(row == 2) {
                         tem.movable = true;
                     }
                     this.checkers[chekersCount] = tem;
+                    chekersCount++;
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
-                    let tem = new Checker(this.board, checker, [+row,+col])  
-                    chekersCount++;
+                    let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
                     if(row == 5) {
                         tem.movable = true;
                     }
                     this.checkers[chekersCount] = tem;
+                    chekersCount++;
                 }
             }
 
