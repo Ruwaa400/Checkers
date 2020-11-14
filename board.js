@@ -8,6 +8,7 @@ class Move{
     };
 };
 
+<<<<<<< HEAD
 class Tile{
     constructor(board, obj, location) {
         this.board = board;
@@ -98,6 +99,8 @@ class Checker{
     
 };
 
+=======
+>>>>>>> 3d4087b117b6622666b6b5c2d21e6155f6bf511e
 class Board {
     
     constructor() {
@@ -401,8 +404,6 @@ class Board {
                 checker.classList.add('checker');
                 checker.setAttribute('id', chekersCount);
 
-                //checker.addEventListener('click', this.Select);
-
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
@@ -426,5 +427,18 @@ class Board {
 
             tilesDiv.appendChild(line);
         }
+    };
+
+    reDrawBoard(){
+        // Removes an element from the document
+        let element = document.getElementsByClassName("tiles");
+        console.log(element);
+        // element[0].remove();
+        // return false;
+        while (element[0].firstChild) {
+            element[0].removeChild(element[0].lastChild);
+          }
+        
+        this.DrawBoard()
     };
 };
