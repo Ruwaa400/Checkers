@@ -1,8 +1,8 @@
 
 class Move{
-    constructor(pastPosition, nextPosition, checkerID) {
-        this.pastPosition = pastPosition;
-        this.nextPosition = nextPosition;
+    constructor(pastlocation, nextlocation, checkerID) {
+        this.pastlocation = pastlocation;
+        this.nextlocation = nextlocation;
         this.checker = checkerID;
     };
 };
@@ -14,7 +14,7 @@ class Tile{
         this.location = location;
 
         //can only play on black tiles
-        if( (this.position[0] + this.position[1])%2 ){
+        if( (this.location[0] + this.location[1])%2 ){
             this.available = true;
         }
         else{
@@ -29,10 +29,10 @@ class Checker{
         this.board = board;
         this.element = ele;
         this.location = location;
-        this.lastMove;
         this.king = false;
+        this.movable = false;
         // who has the checker
-        if (this.element.getAttribute('id') < 15) {
+        if (this.element.getAttribute('id') < 12) {
             this.player = 1;
         } else {
             this.player = 2;
@@ -45,15 +45,15 @@ class Board {
     
     constructor() {
         this.size = 8;
+        this.lastMove;
         this.board = this.Init();
         this.tiles = [];
         this.checkers = [];
         this.redKings = 0;
         this.blueKings = 0;
-        this.redTiles = 15;
-        this.blueTiles = 15;
+        this.redTiles = 12;
+        this.blueTiles = 12;
 
-        this.DrawBoard();
     };
 
     Init() {
@@ -94,6 +94,79 @@ class Board {
         return board;
     };
 
+
+    inDanger_safe(player){
+        //count [inDanger, safe, movable]
+        let count = [0,0];
+        let opp = (player == 1? 2 : 1);
+        for(let row in this.board){
+            for(let col in this.board[row]){
+                if(this.board[row][col] == player){
+
+                    //edge pieces
+                    if(row == 0 || row==7 || col==0 || col == 7){
+                        count[0]++;
+                    }
+                    //only one attack counted
+                    //king attacks not counted yet
+                    else if(this.board[row+1][col-1] == opp && this.board[row-1][col+1] == 0){
+                        count[1]++;
+                    }
+                    else if(this.board[row+1][col+1] == opp && this.board[row-1][col-1] == 0){
+                        count[1]++;
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    
+    moveableTiles(player){
+        let count = 0;
+        for(let piece in this.checkers){
+            if(piece.player == player && piece.movable){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    triaP(player){
+        if(this.board[0][1]==player && this.board[0][3]==player && this.board[1][2]==player){
+            return 1;
+        }
+    }
+
+    oreoP(player){
+        if(this.board[0][3]==player && this.board[0][5]==player && this.board[1][4]==player){
+            return 1;
+        }
+        
+    }
+
+    bridgeP(player){
+        if(this.board[0][1]==player && this.board[0][5]==player){
+            return 1;
+        }
+    }
+
+    //needs king to be decided later if needed
+    DogP(player){
+        
+    }
+
+    noMoreMoves(maxiplayer){
+        if(this.moveableTiles(maxiplayer+1) != 0){
+            return false;
+        }
+        return true;
+
+    }
+
+
     DrawBoard() {
         let tilesDiv = document.querySelector('div.tiles');
         let tilesCount = 0;
@@ -128,11 +201,17 @@ class Board {
                     tile.appendChild(checker);
                     this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
                     chekersCount++;
+                    if(row == 2) {
+                        this.checkers[chekersCount].movable = true;
+                    }
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
                     this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
                     chekersCount++;
+                    if(row == 5) {
+                        this.checkers[chekersCount].movable = true;
+                    }
                 }
             }
 
