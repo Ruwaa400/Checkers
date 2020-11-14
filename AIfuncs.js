@@ -15,11 +15,10 @@ alphabeta(tem, 6, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true);
 }
 
 //usign  15F
-//functions not implemented yet
 function evaluate(board){
     let val = 0;
-    let c1 = board.inDanger_safe_movable(1);
-    let c2 = board.inDanger_safe_movable(2);
+    let c1 = board.inDanger_safe(1);
+    let c2 = board.inDanger_safe(2);
     //no. of tiles
     let param1 = board.redTiles - board.blueTiles;
     //no. of kings

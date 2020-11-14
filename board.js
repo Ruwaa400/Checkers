@@ -166,6 +166,7 @@ class Board {
 
     }
 
+    
     findMoves(player){
         //return array of moves
         let mvs = [];
