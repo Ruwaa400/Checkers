@@ -166,6 +166,20 @@ class Board {
 
     }
 
+    findMoves(player){
+        //return array of moves
+        let mvs = [];
+        for(let piece in this.checkers){
+            if(piece.player == player && piece.movable){
+                
+                
+            }
+        }
+
+
+
+    }
+
 
     DrawBoard() {
         let tilesDiv = document.querySelector('div.tiles');
@@ -199,19 +213,21 @@ class Board {
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
-                    this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
+                    let tem = new Checker(this.board, checker, [+row,+col])
                     chekersCount++;
                     if(row == 2) {
-                        this.checkers[chekersCount].movable = true;
+                        tem.movable = true;
                     }
+                    this.checkers[chekersCount] = tem;
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
-                    this.checkers[chekersCount] = new Checker(this.board, checker, [+row,+col]);
+                    let tem = new Checker(this.board, checker, [+row,+col])  
                     chekersCount++;
                     if(row == 5) {
-                        this.checkers[chekersCount].movable = true;
+                        tem.movable = true;
                     }
+                    this.checkers[chekersCount] = tem;
                 }
             }
 
