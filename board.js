@@ -7,40 +7,6 @@ class Move{
     };
 };
 
-class Tile{
-    constructor(board, obj, location) {
-        this.board = board;
-        this.obj = obj;
-        this.location = location;
-
-        //can only play on black tiles
-        if( (this.location[0] + this.location[1])%2 ){
-            this.available = true;
-        }
-        else{
-            this.available = false;
-        }
-    };
-    
-};
-
-class Checker{
-    constructor(board, ele, location) {
-        this.board = board;
-        this.element = ele;
-        this.location = location;
-        this.king = false;
-        this.movable = false;
-        // who has the checker
-        if (this.element.getAttribute('id') < 12) {
-            this.player = 1;
-        } else {
-            this.player = 2;
-        }
-    };
-    
-};
-
 class Board {
     
     constructor() {
@@ -208,8 +174,6 @@ class Board {
                 checker.classList.add('checker');
                 checker.setAttribute('id', chekersCount);
 
-                //checker.addEventListener('click', this.Select);
-
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
@@ -233,5 +197,18 @@ class Board {
 
             tilesDiv.appendChild(line);
         }
+    };
+
+    reDrawBoard(){
+        // Removes an element from the document
+        let element = document.getElementsByClassName("tiles");
+        console.log(element);
+        // element[0].remove();
+        // return false;
+        while (element[0].firstChild) {
+            element[0].removeChild(element[0].lastChild);
+          }
+        
+        this.DrawBoard()
     };
 };
