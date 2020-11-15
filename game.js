@@ -43,7 +43,7 @@ class Game {
         console.log("turn" + this.turn);
         let tem = AInextMove();
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
-        
+        console.log(currBoard.kingsList);
         this.next();
     }
     next() {

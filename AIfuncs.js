@@ -1,10 +1,4 @@
 
-let tem = passBoard();
-
-//function show(){
-//    console.log(tem.board);
-//}
-
 //JSON.parse(JSON.stringify(object))
 //AI player 1 red
 //board object
@@ -300,15 +294,18 @@ function makeMoveAI(board, kings, move, player){
     //check if killed king to remove from kings list, not implemented
     //updating king status
     if(!kingFlag && move.nextlocation[0] == 7){
-        console.log("should become king");
-        console.log(move.nextlocation);
+        //console.log("should become king");
+        //console.log(move.nextlocation);
         kings.push([player, move.nextlocation[0], move.nextlocation[1]]);
-        console.log(kings[0][0] + " " + kings[0][1] +" "+ kings[0][2]);
-        console.log(isKing(player, move.nextlocation, kings));
+        //console.log(kings[0][0] + " " + kings[0][1] +" "+ kings[0][2]);
+        //console.log(isKing(player, move.nextlocation, kings));
     }
     //update king list
     if(kingFlag){
-        updateKingLoc(player, move.pastlocation, move.nextlocation);
+        //console.log("update king location");
+        //console.log(move.nextlocation);
+        updateKingLoc(kings, player, move.pastlocation, move.nextlocation);
+        //console.log(kings);
     }
 
     if(move.jump){
@@ -355,13 +352,12 @@ function removeKing(kings, killedloc, player){
 
 }
 
-function updateKingLoc(player, pastlocation, nextlocation){
-    for(let t in kings){
-        if (t[0] == player && t[1] == pastlocation[0] && t[2] == pastlocation[1]){
-            t[1] = nextlocation[0];
-            t[2] = nextlocation[1];
+function updateKingLoc(kings, player, pastlocation, nextlocation){
+    for(let i = 0; i < kings.length ; i++){
+        if ((kings[i][0] == player) && (kings[i][1] == pastlocation[0]) && (kings[i][2] == pastlocation[1])){
+            kings[i][1] = nextlocation[0];
+            kings[i][2] = nextlocation[1];
             return;
         }
     }
-
 }
