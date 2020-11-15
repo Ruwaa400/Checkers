@@ -17,10 +17,11 @@ class Board {
         this.board = this.Init();
         this.tiles = [];
         this.checkers = [];
-        this.redKings = 0;
-        this.blueKings = 0;
-        this.redTiles = 12;
-        this.blueTiles = 12;
+        this.kingsList = [];
+        //this.redKings = 0;
+        //this.blueKings = 0;
+        //this.redTiles = 12;
+        //this.blueTiles = 12;
 
     };
 
@@ -44,7 +45,9 @@ class Board {
                 else if( (i == 5 || i == 7) && even) {
                     board[i][j] = 2;
                 }
-                else board[i][j] = 0;
+                else {
+                    board[i][j] = 0;
+                }
                 even = !even;
             }
         }
@@ -255,13 +258,13 @@ class Board {
             if(move.pastlocation[0] > move.nextlocation[0]){
                 //left
                 if(move.pastlocation[1] > move.nextlocation[1]){
+                    //
                     this.board[move.pastlocation[0]-1][move.pastlocation[1]-1] = 0;
                 }
                 //right
                 else{
                     this.board[move.pastlocation[0]-1][move.pastlocation[1]+1] = 0;
                 }
-
             }
             //going down
             else{
@@ -312,6 +315,9 @@ class Board {
                 checker.classList.add('checker');
                 checker.setAttribute('id', chekersCount);
 
+
+                //we need a way to save king status when redrawing
+                //we can keep a list of the IDs of checkers that are kings
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
