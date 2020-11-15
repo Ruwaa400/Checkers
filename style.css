@@ -167,3 +167,6 @@ button:hover {
     transition-duration: 0.3s;
 }
 
+i {
+    color: yellow;
+}

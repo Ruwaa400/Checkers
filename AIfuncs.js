@@ -166,7 +166,7 @@ function noTiles(board, player){
 function noKings(kings, player){
     let count = 0;
     for(let row in kings){
-        if(kings[0] == player){
+        if(row[0] == player){
             count++;
         }
     }
@@ -184,9 +184,9 @@ function noMoreMoves(board, kings, player){
 }
 
 function isKing(player, loc, kings){
-    for(let t in kings){
-        if (kings[0] == player){
-            if(kings[1] == loc[0] && kings[2] == loc[1])
+    for(let i = 0; i < kings.length ; i++){
+        if (kings[i][0] == player){
+            if((kings[i][1] == loc[0]) && (kings[i][2] == loc[1]))
             return true;
         }
     }
@@ -290,17 +290,27 @@ function makeMoveAI(board, kings, move, player){
     //need to update checkers list, checker king status and movable attribute, and if there's kings
     //remove checker by setting player 0
     //updat board list
+    let opp = (player == 1)? 2: 1; 
    
     board[move.pastlocation[0]][move.pastlocation[1]] = 0;
     board[move.nextlocation[0]][move.nextlocation[1]] = player;
     
     let killedloc = [0, 0];
-    let kingFlag = isKing(player, move.loc, kings);
+    let kingFlag = isKing(player, move.pastlocation, kings);
     //check if killed king to remove from kings list, not implemented
     //updating king status
     if(!kingFlag && move.nextlocation[0] == 7){
-        kings.push(player, move.nextlocation[0],move.nextlocation[1]);
+        console.log("should become king");
+        console.log(move.nextlocation);
+        kings.push([player, move.nextlocation[0], move.nextlocation[1]]);
+        console.log(kings[0][0] + " " + kings[0][1] +" "+ kings[0][2]);
+        console.log(isKing(player, move.nextlocation, kings));
     }
+    //update king list
+    if(kingFlag){
+        updateKingLoc(player, move.pastlocation, move.nextlocation);
+    }
+
     if(move.jump){
         //king case going up
         if(move.pastlocation[0] > move.nextlocation[0]){
@@ -330,15 +340,26 @@ function makeMoveAI(board, kings, move, player){
             }
 
         }
-        removeKing(kings, killedloc, 2);               
+        removeKing(kings, killedloc, opp);               
     }
 
 }
 
 function removeKing(kings, killedloc, player){
     for(let t in kings){
-        if (kings[0] == player && kings[1] == killedloc[0] && kings[2] == killedloc[1]){
-            kings[0] = 0;
+        if (t[0] == player && t[1] == killedloc[0] && t[2] == killedloc[1]){
+            t[0] = 0;
+            return;
+        }
+    }
+
+}
+
+function updateKingLoc(player, pastlocation, nextlocation){
+    for(let t in kings){
+        if (t[0] == player && t[1] == pastlocation[0] && t[2] == pastlocation[1]){
+            t[1] = nextlocation[0];
+            t[2] = nextlocation[1];
             return;
         }
     }

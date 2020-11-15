@@ -235,7 +235,7 @@ class Board {
         //check if killed king to remove count , not implemented
 
         //check if checker movable 
-        this.checkers[move.checkerID].movable = this.checkers[move.checkerID].movable(player);
+        //this.checkers[move.checkerID].movable = this.checkers[move.checkerID].movable(player);
 
         //updating king count and status
         if(!this.checkers[move.checkerID].king && (move.nextlocation[0] == 0 || move.nextlocation[0] == 7)){
@@ -314,10 +314,11 @@ class Board {
                 let checker = document.createElement('div');
                 checker.classList.add('checker');
                 checker.setAttribute('id', chekersCount);
+                //<i class="fas fa-crown"></i>
+                //let icon = document.createElement('i');
+                
+                //icon.classList.add('em', 'em-crown');
 
-
-                //we need a way to save king status when redrawing
-                //we can keep a list of the IDs of checkers that are kings
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
@@ -327,6 +328,11 @@ class Board {
                     }
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
+                    if(isKing(1, [row, col], currBoard.kingsList)){
+                        let icon = document.createElement('i');
+                        icon.classList.add('em', 'em-crown');checker.appendChild(icon);
+                        checker.appendChild(icon);
+                    }
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
@@ -336,6 +342,11 @@ class Board {
                     }
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
+                    if(isKing(1, [row, col], currBoard.kingsList)){
+                        let icon = document.createElement('i');
+                        icon.classList.add('em', 'em-crown');checker.appendChild(icon);
+                        checker.appendChild(icon);
+                    }
                 }
             }
 
