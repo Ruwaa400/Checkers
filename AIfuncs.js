@@ -51,7 +51,7 @@ function evaluate(board, kings){
     let param8 = bridgeP(board, 1);
     
     //coefficients will be adjusted with tests
-    val = param1 + 2*param2 + param3 + 2*param4 + param5 + param6 + param7 + param8;
+    val = 2*param1 + 2*param2 + 2*param3 + 2*param4 + param5 + 2*param6 + 2*param7 + 2*param8;
     return val;
 }
 

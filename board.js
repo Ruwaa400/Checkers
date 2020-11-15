@@ -265,9 +265,6 @@ class Board {
                     checker.classList.add('red');
                     tile.appendChild(checker);
                     let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
-                    if(row == 2) {
-                        tem.movable = true;
-                    }
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
                     if(isKing(1, [row, col], currBoard.kingsList)){
@@ -279,12 +276,9 @@ class Board {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
                     let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
-                    if(row == 5) {
-                        tem.movable = true;
-                    }
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
-                    if(isKing(1, [row, col], currBoard.kingsList)){
+                    if(isKing(2, [row, col], currBoard.kingsList)){
                         let icon = document.createElement('i');
                         icon.classList.add('em', 'em-crown');checker.appendChild(icon);
                         checker.appendChild(icon);
