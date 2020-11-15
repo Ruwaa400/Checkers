@@ -15,17 +15,20 @@ function AInextMove(){
 
     let maxValue = Number.NEGATIVE_INFINITY;
     let nextMove;
+    //console.log("inside AInextMove");
     let children = findMovesAI(currBoard.board, currBoard.kingsList, 1);
 
     //cloning
     let boardTem = JSON.parse(JSON.stringify(currBoard.board));
     let kingsTem = JSON.parse(JSON.stringify(currBoard.kingsList));
 
+    //console.log("number of moves" + children.length);
+
     for (let i = 0; i< children.length; i++) {
-        console.log("child");
-        console.log(children[i].pastlocation[0]);
         let v = alphabeta(boardTem, kingsTem, children[i], 3,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
+        //console.log("inside loop " + v);
         if( v > maxValue ){
+            //console.log("yes it's better");
             maxValue = v;
             nextMove = children[i];
         }
@@ -65,7 +68,7 @@ function alphabeta(bList, kingsTem, move, depth, alpha, beta, maxiplayer){
     //kings row hold [player, [row,col]]
     let board = JSON.parse(JSON.stringify(bList));
     let kings = JSON.parse(JSON.stringify(kingsTem));
-    console.log(move.pastlocation);
+    
     makeMoveAI(board, kings, move, maxiplayer+1);
 
     if (depth == 0 || noMoreMoves(board, kings, maxiplayer+1)){
@@ -130,12 +133,14 @@ function triaP(board, player){
     if(board[0][1]==player && board[0][3]==player && board[1][2]==player){
         return 1;
     }
+    else return 0;
 }
 
 function oreoP(board, player){
     if(board[0][3]==player && board[0][5]==player && board[1][4]==player){
         return 1;
     }
+    else return 0;
     
 }
 
@@ -143,6 +148,7 @@ function bridgeP(board, player){
     if(board[0][1]==player && board[0][5]==player){
         return 1;
     }
+    else return 0;
 }
 
 function noTiles(board, player){
@@ -273,7 +279,7 @@ function findMovesAI(board, kings, player){
             fCount++;
         }
     }
-    console.log("flag " + flag)
+    
     if ( flag ){
         return finalMvs;
     }
@@ -284,11 +290,7 @@ function makeMoveAI(board, kings, move, player){
     //need to update checkers list, checker king status and movable attribute, and if there's kings
     //remove checker by setting player 0
     //updat board list
-    console.log("move prop");
-    console.log(move.pastlocation);
-    console.log(move.pastlocation[0]);
-    console.log(move.pastlocation[1]);
-    
+   
     board[move.pastlocation[0]][move.pastlocation[1]] = 0;
     board[move.nextlocation[0]][move.nextlocation[1]] = player;
     
@@ -318,9 +320,7 @@ function makeMoveAI(board, kings, move, player){
         else{
             if(move.pastlocation[1] > move.nextlocation[1]){
                 
-                console.log("number");
-                console.log(parseInt(move.pastlocation[0])+1);
-                console.log( parseInt(move.pastlocation[0])+1 + move.pastlocation[1]-1);
+               
                 killedloc = [parseInt(move.pastlocation[0])+1, parseInt(move.pastlocation[1])-1];
                 board[parseInt(move.pastlocation[0])+1][move.pastlocation[1]-1] = 0;
             }

@@ -40,9 +40,10 @@ class Game {
 
 //we need to check if game ended after each move to declare winner
     moveAI(){
-        console.log(this.turn);
+        console.log("turn" + this.turn);
         let tem = AInextMove();
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
+        
         this.next();
     }
     next() {
