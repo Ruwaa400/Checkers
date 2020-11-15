@@ -170,3 +170,21 @@ button:hover {
 i {
     color: yellow;
 }
+
+#menu {
+    height: 30%;
+    width: 100%;
+    margin: 5em;
+    background: rgb(233, 233, 233);
+    border-radius: 1em;
+    display: flex;
+    flex-flow: column;
+    padding: 1em;
+}
+
+#menu h1 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    font-size: 2.5em;
+    margin: 0.5em;
+}

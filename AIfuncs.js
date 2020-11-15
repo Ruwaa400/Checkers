@@ -19,7 +19,7 @@ function AInextMove(){
     //console.log("number of moves" + children.length);
 
     for (let i = 0; i< children.length; i++) {
-        let v = alphabeta(boardTem, kingsTem, children[i], 3,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
+        let v = alphabeta(boardTem, kingsTem, children[i], 5,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
         //console.log("inside loop " + v);
         if( v > maxValue ){
             //console.log("yes it's better");
@@ -170,6 +170,7 @@ function noKings(kings, player){
 
 
 function noMoreMoves(board, kings, player){
+    console.log("inside no more moves");
     if(findMovesAI(board, kings, player).length == 0){
         return true;
     }
@@ -200,35 +201,39 @@ function findMovesAI(board, kings, player){
                 kingFlag = isKing(player, [row,col], kings);
                 
                 //moving left down
-                if( col > 0 && row < 7){
-                    if(board[parseInt(row) + 1][parseInt(col) - 1] == 0){
-                        mvs[mvsCount] = new Move([row,col], [parseInt(row) + 1 , parseInt(col) - 1], player, false);
-                        mvsCount++;
-                    }
-                    else if(col > 1 && row < 6){
-                        if((board[ parseInt(row) + 1 ][ parseInt(col) - 1 ] == opp) && (board[ parseInt(row) + 2 ][ parseInt(col) - 2 ] == 0)){
-                            mvs[mvsCount] = new Move([row,parseInt(col)], [ parseInt(row) + 2 , parseInt(col) - 2 ], player, true);
+                if(player == 1 || kingFlag){
+                    if( col > 0 && row < 7){
+                        if(board[parseInt(row) + 1][parseInt(col) - 1] == 0){
+                            mvs[mvsCount] = new Move([row,col], [parseInt(row) + 1 , parseInt(col) - 1], player, false);
                             mvsCount++;
                         }
-                    }
-                }
-                
-                //moving right down
-                if( col < 7 && row < 7){
-                    if(board[ parseInt(row) + 1 ][ parseInt(col) + 1 ] == 0){
-                        mvs[mvsCount] = new Move([row,col], [ parseInt(row) + 1 , parseInt(col) + 1 ], player, false);
-                        mvsCount++;
-                    }
-                    else if(col < 6 && row < 6){
-                        if((board[ parseInt(row) + 1 ][ parseInt(col) + 1 ] == opp) && (board[ parseInt(row) + 2 ][ parseInt(col) + 2 ] == 0)){
-                            mvs[mvsCount] = new Move([row,col], [ parseInt(row) + 2 , parseInt(col) + 2 ], player, true);
-                            mvsCount++;
+                        else if(col > 1 && row < 6){
+                            if((board[ parseInt(row) + 1 ][ parseInt(col) - 1 ] == opp) && (board[ parseInt(row) + 2 ][ parseInt(col) - 2 ] == 0)){
+                                mvs[mvsCount] = new Move([row,parseInt(col)], [ parseInt(row) + 2 , parseInt(col) - 2 ], player, true);
+                                mvsCount++;
+                            }
                         }
                     }
+                    
+                    //moving right down
+                    if( col < 7 && row < 7){
+                        if(board[ parseInt(row) + 1 ][ parseInt(col) + 1 ] == 0){
+                            mvs[mvsCount] = new Move([row,col], [ parseInt(row) + 1 , parseInt(col) + 1 ], player, false);
+                            mvsCount++;
+                        }
+                        else if(col < 6 && row < 6){
+                            if((board[ parseInt(row) + 1 ][ parseInt(col) + 1 ] == opp) && (board[ parseInt(row) + 2 ][ parseInt(col) + 2 ] == 0)){
+                                mvs[mvsCount] = new Move([row,col], [ parseInt(row) + 2 , parseInt(col) + 2 ], player, true);
+                                mvsCount++;
+                            }
+                        }
+                    }
+
                 }
-                //two additional direction up right and up left
                 
-                if(kingFlag){
+                //two additional direction up right and up left 
+                
+                if(player == 2 || kingFlag){
                     //moving up left
                     if( col > 0 && row > 0){
                         if(board[ parseInt(row) - 1 ][ parseInt(col) - 1 ] == 0){
@@ -293,7 +298,7 @@ function makeMoveAI(board, kings, move, player){
     let kingFlag = isKing(player, move.pastlocation, kings);
     //check if killed king to remove from kings list, not implemented
     //updating king status
-    if(!kingFlag && move.nextlocation[0] == 7){
+    if(!kingFlag && ((move.nextlocation[0] == 7) || (move.nextlocation[0] == 0))) {
         //console.log("should become king");
         //console.log(move.nextlocation);
         kings.push([player, move.nextlocation[0], move.nextlocation[1]]);
@@ -361,3 +366,32 @@ function updateKingLoc(kings, player, pastlocation, nextlocation){
         }
     }
 }
+
+function findMovePlayer(locC, locT, temMvs){
+    for(let i = 0; i < temMvs.length ; i++){
+        if((temMvs[i].pastlocation[0] == locC[0]) && (temMvs[i].pastlocation[1] == locC[1]) && 
+            (temMvs[i].nextlocation[0] == locT[0]) && (temMvs[i].nextlocation[1] == locT[1])){
+                    return temMvs[i];
+        }
+        
+    }
+
+}
+
+function isValidMove(locC, locT, temMvs){
+    console.log(locC);
+    console.log(locT);
+
+    for(let i = 0; i < temMvs.length ; i++){
+        console.log(temMvs[i].pastlocation);
+        console.log(temMvs[i].nextlocation);
+        
+        if((temMvs[i].pastlocation[0] == locC[0]) && (temMvs[i].pastlocation[1] == locC[1]) && 
+            (temMvs[i].nextlocation[0] == locT[0]) && (temMvs[i].nextlocation[1] == locT[1])){
+                return true;
+        }
+        
+    }
+    return false;
+}
+

@@ -1,9 +1,9 @@
 
 class Move{
-    constructor(pastlocation, nextlocation, checkerID, jump) {
+    constructor(pastlocation, nextlocation, player, jump) {
         this.pastlocation = pastlocation;
         this.nextlocation = nextlocation;
-        this.checkerID = checkerID;
+        this.player = player;
         this.jump = jump;
     };
 };
@@ -223,64 +223,6 @@ class Board {
         return mvs;
     }
 
-    makeMove(move, player){
-        //need to update checkers list, checker king status and movable attribute, and if there's kings
-        //remove checker by setting player 0
-        //updat board list
-        this.lastMove = move;
-        this.board[move.pastlocation[0]][move.pastlocation[1]] = 0;
-        this.board[move.nextlocation[0]][move.nextlocation[1]] = player;
-        this.checkers[move.checkerID].location = [move.nextlocation[0], move.nextlocation[1]];
-        
-        //check if killed king to remove count , not implemented
-
-        //check if checker movable 
-        //this.checkers[move.checkerID].movable = this.checkers[move.checkerID].movable(player);
-
-        //updating king count and status
-        if(!this.checkers[move.checkerID].king && (move.nextlocation[0] == 0 || move.nextlocation[0] == 7)){
-            this.checkers[move.checkerID].king = true;
-            if(player == 1){
-                this.board.redKings++;
-            }
-            else{
-                this.board.blueKings++;
-            }
-        }
-        if(move.jump){
-            if(player == 1){
-                this.board.blueTiles--;
-            }
-            else{
-                this.board.redTiles--;
-            }
-            //king case going up
-            if(move.pastlocation[0] > move.nextlocation[0]){
-                //left
-                if(move.pastlocation[1] > move.nextlocation[1]){
-                    //
-                    this.board[move.pastlocation[0]-1][move.pastlocation[1]-1] = 0;
-                }
-                //right
-                else{
-                    this.board[move.pastlocation[0]-1][move.pastlocation[1]+1] = 0;
-                }
-            }
-            //going down
-            else{
-                if(move.pastlocation[1] > move.nextlocation[1]){
-                    this.board[move.pastlocation[0]+1][move.pastlocation[1]-1] = 0;
-                }
-                else{
-                    this.board[move.pastlocation[0]+1][move.pastlocation[1]+1] = 0;
-                }
-
-            }               
-        }
-
-
-        
-    }
        
     // 0 1 0 1 0 0    0,3 -> 2,1 jump 1,2 down left
     // 0 0 2 0 2 0    0,3 -> 2,5 jump 1,4 down right
