@@ -2,7 +2,8 @@
 window.setInterval(function(){
     myGame.AIturn();
   }, 1000);
-
+//
+ 
 class Game {
     constructor() {
         this.turn = 2;     // 1: palyer1, 2: palyer2
@@ -15,19 +16,23 @@ class Game {
     }
 
     moveCheckerP1(locC, locT) {
-        console.log(this.turn);
-        //currBoard.board[locC[0]][locC[1]] = 0;
-        //currBoard.board[locT[0]][locT[1]] = 1;
-        let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
-        let tem = findMovePlayer(locC, locT, temMvs);
-        makeMoveAI(currBoard.board, currBoard.kingsList, tem, this.turn);
-        this.next();
+        if(!this.AI){
+            console.log(this.turn);
+            //currBoard.board[locC[0]][locC[1]] = 0;
+            //currBoard.board[locT[0]][locT[1]] = 1;
+            let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
+            let tem = findMovePlayer(locC, locT, temMvs);
+            makeMoveAI(currBoard.board, currBoard.kingsList, tem, this.turn);
+            this.next();
 
-        if(noMoreMoves(currBoard.board, currBoard.kingsList, 2)){
-            this.winner = 1;
-            document.getElementById("winner").innerHTML = "Player 1 won!";
-            return;
+            if(noMoreMoves(currBoard.board, currBoard.kingsList, 2)){
+                this.winner = 1;
+                document.getElementById("winner").innerHTML = "Player 1 won!";
+                return;
+            }
+
         }
+        
     };
 
     moveCheckerP2(locC, locT) {
@@ -46,6 +51,7 @@ class Game {
         if(noMoreMoves(currBoard.board, currBoard.kingsList, 1)){
             this.winner = 2;
             document.getElementById("winner").innerHTML = "Player 2 won!";
+            clearInterval();
             return;
         }
         
@@ -65,8 +71,6 @@ class Game {
         //return (((locC[0] - 1 == locT[0]) && (locC[1] - 1 == locT[1]))
          //   || ((locC[0] - 1 == locT[0]) && (locC[1] + 1 == locT[1]))) ? true : false;
     };
-
-//we need to check if game ended after each move to declare winner
 
 
     //added this cause i noticed some lag when moveAI is put in checker turn , night change it later
@@ -89,6 +93,7 @@ class Game {
             console.log("game ended");
             this.winner = 1;
             document.getElementById("winner").innerHTML = "Player 1 won!";
+            clearInterval();
             return;
         }
     }
@@ -104,6 +109,12 @@ class Game {
     onePlayer(){
         this.AI = true;
         this.turn = 2;
+        document.getElementById("two").disabled = true;
+    }
+    twoPlayers(){
+        this.AI = false;
+        this.turn = 2;
+        document.getElementById("one").disabled = true;
     }
 }
 
