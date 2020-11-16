@@ -7,12 +7,4 @@ window.onload = () => {
     myGame  = new Game();
 };
 
-function passBoard(){
-    console.log(currBoard.board);
-    return currBoard;
-}
-
-//maybe put game functions here
-
-
 

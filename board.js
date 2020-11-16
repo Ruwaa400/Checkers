@@ -65,165 +65,6 @@ class Board {
         return board;
     };
 
-
-    inDanger_safe(player){
-        //count [inDanger, safe, movable]
-        let count = [0,0];
-        let opp = (player == 1? 2 : 1);
-        for(let row in this.board){
-            for(let col in this.board[row]){
-                if(this.board[row][col] == player){
-
-                    //edge pieces
-                    if(row == 0 || row==7 || col==0 || col == 7){
-                        count[0]++;
-                    }
-                    //only one attack counted
-                    //king attacks not counted yet
-                    else if(this.board[row+1][col-1] == opp && this.board[row-1][col+1] == 0){
-                        count[1]++;
-                    }
-                    else if(this.board[row+1][col+1] == opp && this.board[row-1][col-1] == 0){
-                        count[1]++;
-                    }
-
-                }
-
-            }
-        }
-
-    }
-
-    
-    moveableTiles(player){
-        let count = 0;
-        for(let piece in this.checkers){
-            if(piece.player == player && piece.movable){
-                count++;
-            }
-        }
-        return count;
-    }
-
-    triaP(player){
-        if(this.board[0][1]==player && this.board[0][3]==player && this.board[1][2]==player){
-            return 1;
-        }
-    }
-
-    oreoP(player){
-        if(this.board[0][3]==player && this.board[0][5]==player && this.board[1][4]==player){
-            return 1;
-        }
-        
-    }
-
-    bridgeP(player){
-        if(this.board[0][1]==player && this.board[0][5]==player){
-            return 1;
-        }
-    }
-
-    //needs king to be decided later if needed
-    DogP(player){
-        
-    }
-
-    noMoreMoves(maxiplayer){
-        if(this.moveableTiles(maxiplayer+1) != 0){
-            return false;
-        }
-        return true;
-
-    }
-
-
-    findMoves(player){
-        //return array of moves
-        let finalMvs = [];
-        let mvs = [];
-        let mvsCount = 0;
-        let opp = (player == 1? 2 : 1);
-        for(let piece in this.checkers){
-            if(piece.player == player && piece.movable){
-
-                //moving left jump or no jump down
-                if( piece.location[1] > 0 && piece.location[0] < 7){
-                    if(this.board[ piece.location[0] + 1 ][ piece.location[1] - 1 ] == 0){
-                        mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 1 , piece.location[1] - 1 ], piece.ID, false);
-                        mvsCount++;
-                    }
-                    else if(piece.location[1] > 1 && piece.location[0] < 6){
-                        if((this.board[ piece.location[0] + 1 ][ piece.location[1] - 1 ] == opp) && (this.board[ piece.location[0] + 2 ][ piece.location[1] - 2 ] == 0)){
-                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 2 , piece.location[1] - 2 ], piece.ID, true);
-                            mvsCount++;
-                        }
-                    }
-                }
-                
-                //moving right down
-                if( piece.location[1] < 7 && piece.location[0] < 7){
-                    if(this.board[ piece.location[0] + 1 ][ piece.location[1] + 1 ] == 0){
-                        mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 1 , piece.location[1] + 1 ], piece.ID, false);
-                        mvsCount++;
-                    }
-                    else if(piece.location[1] < 6 && piece.location[0] < 6){
-                        if((this.board[ piece.location[0] + 1 ][ piece.location[1] + 1 ] == opp) && (this.board[ piece.location[0] + 2 ][ piece.location[1] + 2 ] == 0)){
-                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] + 2 , piece.location[1] + 2 ], piece.ID, true);
-                            mvsCount++;
-                        }
-                    }
-                }
-                //two additional direction up right and up left
-                if(piece.king){
-                    //moving up left
-                    if( piece.location[1] > 0 && piece.location[0] > 0){
-                        if(this.board[ piece.location[0] - 1 ][ piece.location[1] - 1 ] == 0){
-                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 1 , piece.location[1] - 1 ], piece.ID, false);
-                            mvsCount++;
-                        }
-                        else if(piece.location[1] > 1 && piece.location[0] > 1){
-                            if((this.board[ piece.location[0] - 1 ][ piece.location[1] - 1 ] == opp) && (this.board[ piece.location[0] - 2 ][ piece.location[1] - 2 ] == 0)){
-                                mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 2 , piece.location[1] - 2 ], piece.ID, true);
-                                mvsCount++;
-                            }
-                        }
-                    }
-                    
-                    //moving up right 
-                    if( piece.location[1] < 7 && piece.location[0] > 0){
-                        if(this.board[ piece.location[0] - 1 ][ piece.location[1] + 1 ] == 0){
-                            mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 1 , piece.location[1] + 1 ], piece.ID, false);
-                            mvsCount++;
-                        }
-                        else if(piece.location[1] < 6 && piece.location[0] > 1){
-                            if((this.board[ piece.location[0] - 1 ][ piece.location[1] + 1 ] == opp) && (this.board[ piece.location[0] - 2 ][ piece.location[1] + 2 ] == 0)){
-                                mvs[mvsCount] = new Move(piece.location, [ piece.location[0] - 2 , piece.location[1] + 2 ], piece.ID, true);
-                                mvsCount++;
-                            }
-                        }
-                    }
-
-                }
-            }
-        }
-
-        //if theres jumps dont include other moves
-        let fCount = 0;
-        let flag = false; //is false return mvs as it is 
-        for(let t in mvs){
-            if ( t.jump ){
-                finalMvs[fCount] = t;
-                flag = true;
-            }
-        }
-        if ( flag ){
-            return finalMvs;
-        }
-        return mvs;
-    }
-
-       
     // 0 1 0 1 0 0    0,3 -> 2,1 jump 1,2 down left
     // 0 0 2 0 2 0    0,3 -> 2,5 jump 1,4 down right
     // 0 0 0 1 0 0    4,3 -> 2,1 jump 3,2 up left
@@ -258,8 +99,8 @@ class Board {
                 checker.setAttribute('id', chekersCount);
                 //<i class="fas fa-crown"></i>
                 //let icon = document.createElement('i');
-                
-                //icon.classList.add('em', 'em-crown');
+                //icon.classList.add('fas', 'fa-crown', 'fa-2x');
+                //checker.appendChild(icon);
 
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
@@ -269,7 +110,8 @@ class Board {
                     chekersCount++;
                     if(isKing(1, [row, col], currBoard.kingsList)){
                         let icon = document.createElement('i');
-                        icon.classList.add('em', 'em-crown');checker.appendChild(icon);
+                        icon.classList.add('fas', 'fa-crown', 'fa-2x');
+                        checker.appendChild(icon);
                         checker.appendChild(icon);
                     }
                 } else if (this.board[row][col] === 2) {
@@ -280,7 +122,8 @@ class Board {
                     chekersCount++;
                     if(isKing(2, [row, col], currBoard.kingsList)){
                         let icon = document.createElement('i');
-                        icon.classList.add('em', 'em-crown');checker.appendChild(icon);
+                        icon.classList.add('fas', 'fa-crown', 'fa-2x');
+                        checker.appendChild(icon);
                         checker.appendChild(icon);
                     }
                 }

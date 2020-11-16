@@ -19,7 +19,7 @@ function AInextMove(){
     //console.log("number of moves" + children.length);
 
     for (let i = 0; i< children.length; i++) {
-        let v = alphabeta(boardTem, kingsTem, children[i], 5,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
+        let v = alphabeta(boardTem, kingsTem, children[i], 3,  Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, false);
         //console.log("inside loop " + v);
         if( v > maxValue ){
             //console.log("yes it's better");
@@ -51,7 +51,7 @@ function evaluate(board, kings){
     let param8 = bridgeP(board, 1);
     
     //coefficients will be adjusted with tests
-    val = 2*param1 + 2*param2 + 2*param3 + 2*param4 + param5 + 2*param6 + 2*param7 + 2*param8;
+    val = param1 + 3*param2 + 3*param3 + 3*param4 + param5 + 2*param6 + 2*param7 + 2*param8;
     return val;
 }
 
@@ -96,7 +96,7 @@ function alphabeta(bList, kingsTem, move, depth, alpha, beta, maxiplayer){
 }
 
 function inDanger_safe(board, player){
-    //count [inDanger, safe, movable]
+    //count [inDanger, safe]
     let count = [0,0];
     let opp = (player == 1? 2 : 1);
     for(let row in board){
