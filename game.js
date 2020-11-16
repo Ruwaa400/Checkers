@@ -1,3 +1,8 @@
+
+window.setInterval(function(){
+    myGame.AIturn();
+  }, 1000);
+
 class Game {
     constructor() {
         this.turn = 2;     // 1: palyer1, 2: palyer2
@@ -43,9 +48,7 @@ class Game {
             document.getElementById("winner").innerHTML = "Player 2 won!";
             return;
         }
-        if(this.AI){
-            this.AIturn();
-        }
+        
     };
 
     validDiagonalP1(locC, locT) { // red - moves down
@@ -68,7 +71,10 @@ class Game {
 
     //added this cause i noticed some lag when moveAI is put in checker turn , night change it later
     AIturn(){
-        this.moveAI();
+        if(this.AI && (this.turn == 1)){
+            this.moveAI();
+        }
+        
     }
     moveAI(){
         
