@@ -33,6 +33,8 @@ class Game {
                 this.winner = 1;
                 this.turn = 0;
                 document.getElementById("winner").innerHTML = "Player 1 won!";
+                document.getElementById("red").style.display = "block";
+                document.getElementById("start").style.display = "none";
                 return;
             }
 
@@ -55,6 +57,8 @@ class Game {
             this.winner = 2;
             this.turn = 0;
             document.getElementById("winner").innerHTML = "Player 2 won!";
+            document.getElementById("red").style.display = "block";
+            document.getElementById("start").style.display = "none";
             clearInterval();
             return;
         }
@@ -96,6 +100,9 @@ class Game {
             this.winner = 1;
             this.turn = 0;
             document.getElementById("winner").innerHTML = "Player 1 won!";
+            document.getElementById("winneri").style.display = "block";
+            document.getElementById("start").style.display = "none";
+
             clearInterval();
             return;
         }
@@ -129,17 +136,35 @@ class Game {
         // currBoard.reDrawBoard();
         console.log("next turn " + this.turn);
         this.thinking = false;
+        this.update_count_display();
     }
 
     onePlayer() {
         this.AI = true;
         this.turn = 2;
-        document.getElementById("two").disabled = true;
+        this.display();
+        
     }
     twoPlayers() {
         this.AI = false;
         this.turn = 2;
-        document.getElementById("one").disabled = true;
+        this.display();
+    }
+    display (){
+        document.getElementById("two").style.display = "none";
+        document.getElementById("one").style.display = "none";
+        document.getElementById("start").innerHTML = "Good Luck!";
+        document.getElementById("red").style.display = "block";
+        document.getElementById("blue").style.display = "block";
+       
+
+    }
+
+    update_count_display (){
+        
+        document.getElementById("redcount").innerHTML = noTiles(currBoard.board, 1);
+        document.getElementById("bluecount").innerHTML = noTiles(currBoard.board, 2);
+
     }
 
     saveChecker(id, loc) {

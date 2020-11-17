@@ -121,7 +121,7 @@ class Board {
                     chekersCount++;
                     if (isKing(1, [row, col], currBoard.kingsList)) {
                         let icon = document.createElement('i');
-                        icon.classList.add('fas', 'fa-crown', 'fa-2x');
+                        icon.classList.add('fas', 'fa-crown', 'fa-2x','king');
                         checker.appendChild(icon);
                         checker.appendChild(icon);
                     }
@@ -133,7 +133,7 @@ class Board {
                     chekersCount++;
                     if (isKing(2, [row, col], currBoard.kingsList)) {
                         let icon = document.createElement('i');
-                        icon.classList.add('fas', 'fa-crown', 'fa-2x');
+                        icon.classList.add('fas', 'fa-crown', 'fa-2x','king');
                         checker.appendChild(icon);
                         checker.appendChild(icon);
                     }
