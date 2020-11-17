@@ -14,19 +14,22 @@ class Checker {
 
         // adding the onclick handler ... for the checker
         this.element.addEventListener('click', () => {
-            console.log("you clicked the checker with id: " + this.element.getAttribute('id'));
 
-            if ((myGame.turn == 1) && (this.player == 1)) {   // red
+            let id = this.element.getAttribute('id');
+            console.log("you clicked the checker with id: " + id);
+
+            if (myGame.isDoubleMode && (this.location === myGame.selectedCheckerLocation)) {
+                myGame.saveChecker(id, this.location);  // it's already saved but id changes with every render.
+            }
+            else if ((myGame.turn == 1) && (this.player == 1)) {   // red
                 // save the selected checker
-                myGame.selectedChecker = this.element.getAttribute('id');
-                myGame.selectedCheckerLocation = this.location;
+                myGame.saveChecker(id, this.location);
 
             } else if ((myGame.turn == 2) && (this.player == 2)) {  // blue
                 // save the selected checker
-                myGame.selectedChecker = this.element.getAttribute('id');
-                myGame.selectedCheckerLocation = this.location;
+                myGame.saveChecker(id, this.location);
             }
 
         });
-     };
+    };
 };

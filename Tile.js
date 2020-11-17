@@ -17,20 +17,22 @@ class Tile {
 
             // if tile is empty
             if (this.board[this.location[0]][this.location[1]] == 0) {
-                console.log("you clicked the tile with id: " + this.obj.getAttribute('id'));
+                
+                let id = this.obj.getAttribute('id');
+                console.log("you clicked the tile with id: " + id);
 
                 if ((myGame.turn == 1) && (myGame.selectedChecker != -1) && this.available
                     && myGame.validDiagonalP1(myGame.selectedCheckerLocation, this.location)) { // red
 
                     // save the selected tile
-                    myGame.selectedTile = this.obj.getAttribute('id');
+                    myGame.saveTile(id, this.location);
                     myGame.moveCheckerP1(myGame.selectedCheckerLocation, this.location);
 
                 } else if ((myGame.turn == 2) && (myGame.selectedChecker != -1) && this.available
                     && myGame.validDiagonalP2(myGame.selectedCheckerLocation, this.location)) {  // blue
 
                     // save the selected tile
-                    myGame.selectedTile = this.obj.getAttribute('id');
+                    myGame.saveTile(id, this.location);
                     myGame.moveCheckerP2(myGame.selectedCheckerLocation, this.location);
 
                 } else {
