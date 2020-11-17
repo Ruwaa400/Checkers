@@ -27,7 +27,7 @@ class Game {
             let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, 1);
             let tem = findMovePlayer(locC, locT, temMvs);
             makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
-            this.next();
+            this.next(tem);
 
             if (noMoreMoves(currBoard.board, currBoard.kingsList, 2)) {
                 this.winner = 1;
@@ -49,7 +49,7 @@ class Game {
         let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, 2);
         let tem = findMovePlayer(locC, locT, temMvs);
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 2);
-        this.next();
+        this.next(tem);
         
         if (noMoreMoves(currBoard.board, currBoard.kingsList, 1)) {
             this.winner = 2;

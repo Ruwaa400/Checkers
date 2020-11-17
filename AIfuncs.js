@@ -14,7 +14,7 @@ function AInextMove(){
     var alpha = NEG_INFINITY;
     var beta = INFINITY;
     var available_moves = findMovesAI(simulated_board, simulated_kings, 1);
-    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 8, alpha, beta, 1);
+    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 9, alpha, beta, 1);
 
     //find all moves that have max-value
     var max_move = null;

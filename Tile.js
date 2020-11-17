@@ -4,7 +4,7 @@ class Tile {
         this.obj = obj;
         this.location = location;
 
-        //can only play on black tiles
+        //can only play on blue tiles
         if ((this.location[0] + this.location[1]) % 2) {
             this.available = true;
         }
