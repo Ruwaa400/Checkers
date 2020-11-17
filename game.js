@@ -9,8 +9,9 @@ class Game {
         this.turn = 2;     // 1: palyer1, 2: palyer2
         this.AI = false; //by default two players
         this.selectedChecker = -1;  // for the id of the selected checker
+        this.tileUnderSelectedChecker = "";
         this.selectedCheckerLocation = [-1, -1];
-        this.selectedTile = -1;
+        this.selectedTile = "";
         this.selectedTileLocation = [-1, -1];
         this.winner = 0;
         this.playerMove;
@@ -62,16 +63,11 @@ class Game {
     validDiagonalP1(locC, locT) { // red - moves down
         let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
         return isValidMove(locC, locT, temMvs);
-
-        //return (((locC[0] + 1 == locT[0]) && (locC[1] - 1 == locT[1]))
-        //   || ((locC[0] + 1 == locT[0]) && (locC[1] + 1 == locT[1]))) ? true : false;
     };
 
     validDiagonalP2(locC, locT) {   // blue - moves up
         let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
         return isValidMove(locC, locT, temMvs);
-        //return (((locC[0] - 1 == locT[0]) && (locC[1] - 1 == locT[1]))
-        //   || ((locC[0] - 1 == locT[0]) && (locC[1] + 1 == locT[1]))) ? true : false;
     };
 
 
@@ -100,11 +96,17 @@ class Game {
         }
     }
     next(lastMove) {
+
+        // currBoard.reDrawBoard();
+        let x = "tile" + this.tileUnderSelectedChecker;
+        // document.getElementById(x).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+
+        // document.getElementById("tile" + this.tileUnderSelectedChecker).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+        // document.getElementById(this.selectedTile).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+
         if (this.isDoubleJump() && lastMove.jump) {
             this.turn = (this.turn == 1) ? 1 : 2;
             // selected checker must remains the same.
-            console.log("checker new loc: " + this.selectedCheckerLocation);
-            console.log("tile old loc: " + this.selectedTileLocation);
             this.selectedCheckerLocation = this.selectedTileLocation;
             this.isDoubleMode = true;
         } else {
@@ -113,6 +115,7 @@ class Game {
             this.isDoubleMode = false;
         }
         this.selectedChecker = -1;  // appearantly the id changes with each render...
+        this.tileUnderSelectedChecker = -1;
         this.selectedTileLocation = [-1, -1];
         this.selectedTile = -1;
         currBoard.reDrawBoard();
@@ -133,6 +136,7 @@ class Game {
     saveChecker(id, loc) {
         this.selectedChecker = id;
         this.selectedCheckerLocation = loc;
+        // document.getElementById(id).style = ""
     }
 
     saveTile(id, loc) {
@@ -157,6 +161,12 @@ class Game {
             }
         }
         return false;
+    }
+
+    removeAllGlow() {
+        for (let i = 0; i < 64; i++) {
+            document.getElementById("tile" + i).style.boxShadow = "";
+        }
     }
 }
 
