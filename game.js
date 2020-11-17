@@ -9,9 +9,9 @@ class Game {
         this.turn = 2;     // 1: palyer1, 2: palyer2
         this.AI = false; //by default two players
         this.selectedChecker = -1;  // for the id of the selected checker
-        this.tileUnderSelectedChecker = "";
+        this.tileUnderSelectedChecker = -1;
         this.selectedCheckerLocation = [-1, -1];
-        this.selectedTile = "";
+        this.selectedTile = -1;
         this.selectedTileLocation = [-1, -1];
         this.winner = 0;
         this.playerMove;
@@ -82,8 +82,8 @@ class Game {
 
         console.log("turn" + this.turn);
         let tem = AInextMove();
+        tem.findTiles();
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
-        console.log(currBoard.kingsList);
         this.next(tem);
 
         console.log(noMoreMoves(currBoard.board, currBoard.kingsList, 2));
@@ -97,12 +97,15 @@ class Game {
     }
     next(lastMove) {
 
-        // currBoard.reDrawBoard();
-        let x = "tile" + this.tileUnderSelectedChecker;
-        // document.getElementById(x).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+        currBoard.reDrawBoard();
 
-        // document.getElementById("tile" + this.tileUnderSelectedChecker).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
-        // document.getElementById(this.selectedTile).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+        let x = this.tileUnderSelectedChecker.toString();
+        x = x.replace("tile", "");
+        document.getElementById("tile" + x).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+       
+        x = this.selectedTile.toString();
+        x = x.replace("tile","");
+        document.getElementById("tile" + x).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
 
         if (this.isDoubleJump() && lastMove.jump) {
             this.turn = (this.turn == 1) ? 1 : 2;
@@ -118,7 +121,7 @@ class Game {
         this.tileUnderSelectedChecker = -1;
         this.selectedTileLocation = [-1, -1];
         this.selectedTile = -1;
-        currBoard.reDrawBoard();
+        // currBoard.reDrawBoard();
         console.log("next turn " + this.turn);
     }
 

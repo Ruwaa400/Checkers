@@ -47,7 +47,7 @@ class Tile {
                 x = x.replace("tile", "");
                 if ((myGame.turn == 1) && (this.board[this.location[0]][this.location[1]] == 1)) {   // red
 
-                    myGame.tileUnderSelectedChecker = x + "";
+                    myGame.tileUnderSelectedChecker = x;
                     document.getElementById(id).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
 
                 } else if ((myGame.turn == 2) && (this.board[this.location[0]][this.location[1]] == 2)) {  // blue

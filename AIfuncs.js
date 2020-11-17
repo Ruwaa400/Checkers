@@ -170,7 +170,7 @@ function noKings(kings, player) {
 
 
 function noMoreMoves(board, kings, player) {
-    console.log("inside no more moves");
+    // console.log("inside no more moves");
     if (findMovesAI(board, kings, player).length == 0) {
         return true;
     }

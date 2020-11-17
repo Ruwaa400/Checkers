@@ -6,6 +6,13 @@ class Move {
         this.player = player;
         this.jump = jump;
     };
+
+    findTiles() {
+        let x = parseInt((this.pastlocation[0] * 8)) + parseInt(this.pastlocation[1]);
+        myGame.tileUnderSelectedChecker = x;
+        x = parseInt((this.nextlocation[0] * 8)) + parseInt(this.nextlocation[1]);
+        myGame.selectedTile = x;
+    };
 };
 
 
