@@ -15,22 +15,24 @@ class Tile {
         // adding the onclick handler ... for the tile
         this.obj.addEventListener('click', () => {
 
-            // if tile is empty
-            if (this.board[this.location[0]][this.location[1]] == 0) {
-                console.log("you clicked the tile with id: " + this.obj.getAttribute('id'));
+            let id = this.obj.getAttribute('id');
+
+            if (this.board[this.location[0]][this.location[1]] == 0) {  // if tile is empty
+
+                console.log("you clicked the tile with id: " + id);
 
                 if ((myGame.turn == 1) && (myGame.selectedChecker != -1) && this.available
                     && myGame.validDiagonalP1(myGame.selectedCheckerLocation, this.location)) { // red
 
-                    // save the selected tile
-                    myGame.selectedTile = this.obj.getAttribute('id');
+                    document.getElementById(id).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+                    myGame.saveTile(id, this.location);
                     myGame.moveCheckerP1(myGame.selectedCheckerLocation, this.location);
 
                 } else if ((myGame.turn == 2) && (myGame.selectedChecker != -1) && this.available
                     && myGame.validDiagonalP2(myGame.selectedCheckerLocation, this.location)) {  // blue
 
-                    // save the selected tile
-                    myGame.selectedTile = this.obj.getAttribute('id');
+                    document.getElementById(id).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+                    myGame.saveTile(id, this.location);
                     myGame.moveCheckerP2(myGame.selectedCheckerLocation, this.location);
 
                 } else {
@@ -38,6 +40,20 @@ class Tile {
                     console.log("not a valid tile :(");
                 }
 
+            } else {    // color the tile because the checker on it was selected.
+                myGame.removeAllGlow();
+                console.log("now it's not");
+                let x = id + "";
+                x = x.replace("tile", "");
+                if ((myGame.turn == 1) && (this.board[this.location[0]][this.location[1]] == 1)) {   // red
+
+                    myGame.tileUnderSelectedChecker = x;
+                    document.getElementById(id).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+
+                } else if ((myGame.turn == 2) && (this.board[this.location[0]][this.location[1]] == 2)) {  // blue
+                    myGame.tileUnderSelectedChecker = x;
+                    document.getElementById(id).style.boxShadow = "inset 0px 0px 15px 5px rgba(110, 188, 224, 0.75)";
+                }
             }
         });
     };

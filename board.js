@@ -1,5 +1,5 @@
 
-class Move{
+class Move {
     constructor(pastlocation, nextlocation, player, jump) {
         this.pastlocation = pastlocation;
         this.nextlocation = nextlocation;
@@ -7,11 +7,18 @@ class Move{
         this.score = 0;
         this.jump = jump;
     };
+
+    findTiles() {
+        let x = parseInt((this.pastlocation[0] * 8)) + parseInt(this.pastlocation[1]);
+        myGame.tileUnderSelectedChecker = x;
+        x = parseInt((this.nextlocation[0] * 8)) + parseInt(this.nextlocation[1]);
+        myGame.selectedTile = x;
+    };
 };
 
 
 class Board {
-    
+
     constructor() {
         this.size = 8;
         this.lastMove;
@@ -34,16 +41,16 @@ class Board {
             board[i] = [];
 
             for (let j = 0; j < this.size; j++) {
-                if( i == 1 && even) {
-                    board[i][j] = 1; 
-                }
-                else if( (i == 0 || i == 2) && !even) {
+                if (i == 1 && even) {
                     board[i][j] = 1;
                 }
-                else if( i == 6 && !even) {
+                else if ((i == 0 || i == 2) && !even) {
+                    board[i][j] = 1;
+                }
+                else if (i == 6 && !even) {
                     board[i][j] = 2;
                 }
-                else if( (i == 5 || i == 7) && even) {
+                else if ((i == 5 || i == 7) && even) {
                     board[i][j] = 2;
                 }
                 else {
@@ -90,8 +97,8 @@ class Board {
                 // the function needs implementation
                 // tile.addEventListener('click', gameManager.Select);
 
-                line.appendChild(tile); 
-                this.tiles[tilesCount] = new Tile(this.board, tile, [+row,+col]);
+                line.appendChild(tile);
+                this.tiles[tilesCount] = new Tile(this.board, tile, [+row, +col]);
                 tilesCount++;
 
                 //cheker
@@ -106,10 +113,10 @@ class Board {
                 if (this.board[row][col] === 1) {
                     checker.classList.add('red');
                     tile.appendChild(checker);
-                    let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
+                    let tem = new Checker(this.board, checker, [+row, +col], chekersCount);
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
-                    if(isKing(1, [row, col], currBoard.kingsList)){
+                    if (isKing(1, [row, col], currBoard.kingsList)) {
                         let icon = document.createElement('i');
                         icon.classList.add('fas', 'fa-crown', 'fa-2x');
                         checker.appendChild(icon);
@@ -118,10 +125,10 @@ class Board {
                 } else if (this.board[row][col] === 2) {
                     checker.classList.add('blue');
                     tile.appendChild(checker);
-                    let tem = new Checker(this.board, checker, [+row,+col], chekersCount);
+                    let tem = new Checker(this.board, checker, [+row, +col], chekersCount);
                     this.checkers[chekersCount] = tem;
                     chekersCount++;
-                    if(isKing(2, [row, col], currBoard.kingsList)){
+                    if (isKing(2, [row, col], currBoard.kingsList)) {
                         let icon = document.createElement('i');
                         icon.classList.add('fas', 'fa-crown', 'fa-2x');
                         checker.appendChild(icon);
@@ -134,7 +141,7 @@ class Board {
         }
     };
 
-    reDrawBoard(){
+    reDrawBoard() {
         // Removes an element from the document
         let element = document.getElementsByClassName("tiles");
         console.log(element);
@@ -142,8 +149,8 @@ class Board {
         // return false;
         while (element[0].firstChild) {
             element[0].removeChild(element[0].lastChild);
-          }
-        
+        }
+
         this.DrawBoard()
     };
 };
