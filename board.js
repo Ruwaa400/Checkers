@@ -4,6 +4,7 @@ class Move{
         this.pastlocation = pastlocation;
         this.nextlocation = nextlocation;
         this.player = player;
+        this.score = 0;
         this.jump = jump;
     };
 };
