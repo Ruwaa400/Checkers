@@ -8,11 +8,14 @@ class Move {
         this.jump = jump;
     };
 
-    findTiles() {
+    findTilesANDCheckers() {
         let x = parseInt((this.pastlocation[0] * 8)) + parseInt(this.pastlocation[1]);
         myGame.tileUnderSelectedChecker = x;
         x = parseInt((this.nextlocation[0] * 8)) + parseInt(this.nextlocation[1]);
         myGame.selectedTile = x;
+
+        myGame.selectedCheckerLocation = this.pastlocation;
+        myGame.selectedTileLocation = this.nextlocation;
     };
 };
 
