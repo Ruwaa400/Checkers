@@ -82,7 +82,7 @@ class Game {
 
         console.log("turn" + this.turn);
         let tem = AInextMove();
-        tem.findTiles();
+        tem.findTilesANDCheckers();
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
         this.next(tem);
 
@@ -152,9 +152,6 @@ class Game {
         if (temMvs.length != 0) {
             if ((temMvs[0].jump)) {   // if the first one is jump, then all the list is possible jumps for the player
                 for (let i = 0; i < temMvs.length; i++) {   // just check if the jumps are double or not ...
-
-                    console.log("temMvs[i].pastlocation : " + temMvs[i].pastlocation);
-                    console.log("this.selectedTileLocation : " + this.selectedTileLocation);
 
                     if ((temMvs[i].pastlocation[0] == this.selectedTileLocation[0]) && (temMvs[i].pastlocation[1] == this.selectedTileLocation[1])) {
                         console.log("it's double, yeah!");
