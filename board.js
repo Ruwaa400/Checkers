@@ -29,10 +29,6 @@ class Board {
         this.tiles = [];
         this.checkers = [];
         this.kingsList = [];
-        //this.redKings = 0;
-        //this.blueKings = 0;
-        //this.redTiles = 12;
-        //this.blueTiles = 12;
 
     };
 
