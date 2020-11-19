@@ -55,7 +55,7 @@ class Game {
         
         if (noMoreMoves(currBoard.board, currBoard.kingsList, 1)) {
             this.winner = 2;
-            document.getElementById("winner").innerHTML = "Player 2 won!";
+            document.getElementById("winner").innerHTML = "Blue won!";
             this.display_winner();
             return;
         }
@@ -97,7 +97,7 @@ class Game {
         if(noMoreMoves(currBoard.board, currBoard.kingsList, 2)){
             console.log("game ended");
             this.winner = 1;
-            document.getElementById("winner").innerHTML = "Player 1 won!";
+            document.getElementById("winner").innerHTML = "Red won!";
             this.display_winner();
             return;
         }
