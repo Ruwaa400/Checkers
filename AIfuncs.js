@@ -32,6 +32,10 @@ function AInextMove(){
     if (best_moves.length > 1){
         max_move = select_random_move(best_moves);
     }
+    else {
+        console.log("only one best move: "+ best_moves[0]);
+        // return best_moves[0];
+    }
 
     return max_move;
 }
@@ -340,7 +344,7 @@ function findMovesAI(board, kings, player) {
 
     if (flag) {
         // console.log("jumps: " + finalMvs[0].pastlocation + " to "+ finalMvs[0].nextlocation);
-        // if(finalMvs[0].jump) console.log("hey you");
+        if(finalMvs[0].jump) console.log("last loc: "+finalMvs[0].pastlocation+"    next loc: "+finalMvs[0].nextlocation);
         return finalMvs;
     }
     return mvs;

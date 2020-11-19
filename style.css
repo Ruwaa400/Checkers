@@ -202,7 +202,8 @@ h2 i{
 .res{
     text-align: center;
     width: 100%;
-    margin-top: auto;
+    vertical-align: auto;
+    /* margin-top: auto; */
 }
 
 #reset{

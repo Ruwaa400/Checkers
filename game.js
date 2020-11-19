@@ -90,6 +90,8 @@ class Game {
         console.log("turn" + this.turn);
         this.thinking = true;
         let tem = AInextMove();
+        if(tem.jump) console.log("last loc: "+tem.pastlocation+"    next loc: "+tem.nextlocation);
+
         tem.findTilesANDCheckers();
         makeMoveAI(currBoard.board, currBoard.kingsList, tem, 1);
         this.next(tem);
@@ -99,6 +101,7 @@ class Game {
             console.log("game ended");
             this.winner = 1;
             this.turn = 0;
+            document.getElementById("winner").style.display = "block";
             document.getElementById("winner").innerHTML = "Player 1 won!";
             document.getElementById("winneri").style.display = "block";
             document.getElementById("start").style.display = "none";
