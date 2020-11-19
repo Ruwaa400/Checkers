@@ -5,6 +5,27 @@
 let INFINITY = 10000;
 let NEG_INFINITY = -10000;
 
+const positionValuesPlayer = [
+    [0, 6, 0, 6, 0, 6, 0, 6],
+    [4, 0, 4, 0, 4, 0, 4, 0],
+    [0, 3, 0, 1, 0, 2, 0, 4],
+    [4, 0, 2, 0, 1, 0, 3, 0],
+    [0, 3, 0, 1, 0, 2, 0, 4],
+    [4, 0, 2, 0, 2, 0, 3, 0],
+    [0, 3, 0, 3, 0, 3, 0, 4],
+    [4, 0, 6, 0, 6, 0, 6, 0]
+];
+const positionValuesAI = [
+    [0, 7, 0, 7, 0, 7, 0, 5],
+    [6, 0, 3, 0, 3, 0, 3, 0],
+    [0, 4, 0, 2, 0, 2, 0, 6],
+    [6, 0, 2, 0, 1, 0, 3, 0],
+    [0, 3, 0, 1, 0, 2, 0, 6],
+    [6, 0, 2, 0, 1, 0, 3, 0],
+    [0, 4, 0, 3, 0, 3, 0, 6],
+    [4, 0, 4, 0, 5, 0, 5, 0]
+];
+
 function AInextMove(){
 
     //cloning
@@ -14,7 +35,7 @@ function AInextMove(){
     var alpha = NEG_INFINITY;
     var beta = INFINITY;
     var available_moves = findMovesAI(simulated_board, simulated_kings, 1);
-    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 8, alpha, beta, 1);
+    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 7, alpha, beta, 1);
 
     //all moves that have max value
     var max_move = null;
@@ -61,17 +82,21 @@ function evaluate(board, kings){
     var eval = 0;
     var AI_in_danger = 0;
     var player_in_danger = 0;
+    AIScore =0;
+    playerScore =0;
 
     for(let row in board){
         for(let col in board[row]){
             if(board[row][col] == 1){
                 AI_pieces++;
                 AI_safe_sum += evaluate_position(col, row);
+                AIScore += positionValuesAI[row][col] ;
                 //AI_in_danger += in_danger(board, kings, 1, row, col);
             }
             else if(board[row][col] == 2){
                 player_pieces++;
                 player_safe_sum += evaluate_position(col, row);
+                playerScore += positionValuesPlayer[row][col];
                 //player_in_danger = in_danger(board, kings, 2, row, col);
             }
         }
@@ -90,7 +115,7 @@ function evaluate(board, kings){
     
     var avg_safe_diff = (AI_safe_sum / AI_pieces) - (player_safe_sum / player_pieces);
     //+ (AI_in_danger/AI_pieces)-(player_in_danger/player_pieces)
-    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff) ;
+    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff) + 100*(AIScore-playerScore);
     
     //console.log("eval  " + eval);
     return eval;
@@ -103,6 +128,7 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
     //kings row hold [player, [row,col]]
     if (depth <= 0 || noMoreMoves(board, kings, player)) {
         return evaluate(board, kings);
+        //return new_eval(player, board, kings);
     }
     simulated_board = JSON.parse(JSON.stringify(board));
     simulated_kings = JSON.parse(JSON.stringify(kings));
