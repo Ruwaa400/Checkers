@@ -16,7 +16,7 @@ function AInextMove(){
     var available_moves = findMovesAI(simulated_board, simulated_kings, 1);
     var max = alpha_beta(simulated_board, simulated_kings, available_moves, 9, alpha, beta, 1);
 
-    //find all moves that have max-value
+    //all moves that have max value
     var max_move = null;
     var best_moves = [];
         var max_move = null;
@@ -28,13 +28,12 @@ function AInextMove(){
             }
         }
 
-    //randomize selection, if multiple moves have same max-value
+    //random selection, if theres more than one move wi the same value
+    console.log("is  " + available_moves.length);
+    
     if (best_moves.length > 1){
-        max_move = select_random_move(best_moves);
-    }
-    else {
-        console.log("only one best move: "+ best_moves[0]);
-        // return best_moves[0];
+        var index = Math.floor(Math.random() * (best_moves.length - 1));
+        max_move = best_moves[index];
     }
 
     return max_move;
@@ -51,47 +50,46 @@ function evaluate_position(x , y) {
 }
 //usign  15F
 function evaluate(board, kings){
-    var sum = 0;
-    var computer_pieces = 0;
-    var computer_kings = 0;
-    var human_pieces = 0;
-    var human_kings = 0;
-    var computer_pos_sum = 0;
-    var human_pos_sum = 0;
+    
+    var AI_pieces = 0;
+    var AI_kings = noKings(kings, 1);
+    var player_pieces = 0;
+    var player_kings = noKings(kings, 2);
+    var AI_safe_sum = 0;
+    var player_safe_sum = 0;
+    var eval = 0;
 
     for(let row in board){
         for(let col in board[row]){
             if(board[row][col] == 1){
-                computer_pieces++;
-                var computer_pos = evaluate_position(col, row);
-                computer_pos_sum += computer_pos;
+                AI_pieces++;
+                var tem = evaluate_position(col, row);
+                AI_safe_sum += tem;
             }
             else if(board[row][col] == 2){
-                human_pieces++;
-                var human_pos = evaluate_position(col, row);
-	            human_pos_sum += human_pos;
+                player_pieces++;
+                var tem2 = evaluate_position(col, row);
+	            player_safe_sum += tem2;
             }
         }
     }
 
-    human_kings = noKings(kings, 2);
-    computer_kings = noKings(kings, 1);
-    var piece_difference = computer_pieces - human_pieces;
-    var king_difference = computer_kings - human_kings;
-    var avg_human_pos = human_pos_sum / human_pieces;
-    var avg_computer_pos = computer_pos_sum / computer_pieces;
-    var avg_pos_diff = avg_computer_pos - avg_human_pos;
+    var piece_diff = (AI_pieces - player_pieces);
+    var king_diff = (AI_kings - player_kings);
 
-    var features = [piece_difference, king_difference, avg_pos_diff];
-    var weights = [100, 10, 1];
-
-    var eval = 0;
-
-    for (var f=0; f<features.length; f++){
-        var fw = features[f] * weights[f];
-        eval += fw;
+    if (player_pieces === 0){
+        player_pieces = 0.00001;
     }
-
+    
+    if (AI_pieces === 0) {
+        AI_pieces = 0.00001;
+    }
+    
+    var avg_safe_diff = (AI_safe_sum / AI_pieces) - (player_safe_sum / player_pieces);
+    
+    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff);
+    
+    console.log("eval  " + eval);
     return eval;
 }
 
@@ -454,11 +452,4 @@ function isValidMove(locC, locT, temMvs){
     return false;
 }
 
-function select_random_move(moves){
-    // Randomly select move
-    var index = Math.floor(Math.random() * (moves.length - 1));
-    var selected_move = moves[index];
-
-    return selected_move;
-}
 

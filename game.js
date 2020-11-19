@@ -21,6 +21,7 @@ class Game {
 
     moveCheckerP1(locC, locT) {
         if (!this.AI) {
+            
             console.log(this.turn);
             //currBoard.board[locC[0]][locC[1]] = 0;
             //currBoard.board[locT[0]][locT[1]] = 1;
@@ -31,10 +32,8 @@ class Game {
 
             if (noMoreMoves(currBoard.board, currBoard.kingsList, 2)) {
                 this.winner = 1;
-                this.turn = 0;
                 document.getElementById("winner").innerHTML = "Player 1 won!";
-                document.getElementById("red").style.display = "block";
-                document.getElementById("start").style.display = "none";
+                this.display_winner();
                 return;
             }
 
@@ -44,6 +43,7 @@ class Game {
 
     moveCheckerP2(locC, locT) {
 
+        
         console.log(this.turn);
         //currBoard.board[locC[0]][locC[1]] = 0;
         //currBoard.board[locT[0]][locT[1]] = 2;
@@ -55,11 +55,8 @@ class Game {
         
         if (noMoreMoves(currBoard.board, currBoard.kingsList, 1)) {
             this.winner = 2;
-            this.turn = 0;
             document.getElementById("winner").innerHTML = "Player 2 won!";
-            document.getElementById("red").style.display = "block";
-            document.getElementById("start").style.display = "none";
-            clearInterval();
+            this.display_winner();
             return;
         }
 
@@ -86,7 +83,7 @@ class Game {
 
     }
     moveAI() {
-
+        
         console.log("turn" + this.turn);
         this.thinking = true;
         let tem = AInextMove();
@@ -100,15 +97,11 @@ class Game {
         if(noMoreMoves(currBoard.board, currBoard.kingsList, 2)){
             console.log("game ended");
             this.winner = 1;
-            this.turn = 0;
-            document.getElementById("winner").style.display = "block";
             document.getElementById("winner").innerHTML = "Player 1 won!";
-            document.getElementById("winneri").style.display = "block";
-            document.getElementById("start").style.display = "none";
-
-            clearInterval();
+            this.display_winner();
             return;
         }
+        
     }
     next(lastMove) {
 
@@ -140,6 +133,12 @@ class Game {
         console.log("next turn " + this.turn);
         this.thinking = false;
         this.update_count_display();
+        if(this.turn == 1){
+            document.getElementById("turn").innerHTML = "RED turn";
+        }
+        else{
+            document.getElementById("turn").innerHTML = "BLUE turn";
+        }
     }
 
     onePlayer() {
@@ -159,8 +158,17 @@ class Game {
         document.getElementById("start").innerHTML = "Good Luck!";
         document.getElementById("red").style.display = "block";
         document.getElementById("blue").style.display = "block";
-       
+        document.getElementById("turn").style.display = "block";
+        document.getElementById("turn").innerHTML = "BLUE turn"; 
+    }
+    display_winner(){
+        console.log("game ended");
+        this.turn = 0;
+        document.getElementById("winner").style.display = "block";
+        document.getElementById("winneri").style.display = "block";
+        document.getElementById("start").style.display = "none";
 
+        clearInterval();
     }
 
     update_count_display (){
