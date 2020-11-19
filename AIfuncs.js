@@ -14,7 +14,7 @@ function AInextMove(){
     var alpha = NEG_INFINITY;
     var beta = INFINITY;
     var available_moves = findMovesAI(simulated_board, simulated_kings, 1);
-    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 9, alpha, beta, 1);
+    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 8, alpha, beta, 1);
 
     //all moves that have max value
     var max_move = null;
@@ -22,6 +22,7 @@ function AInextMove(){
         var max_move = null;
         for(var i=0;i<available_moves.length;i++){
             var next_move = available_moves[i];
+            
             if (next_move.score == max){
                 max_move = next_move;
                 best_moves.push(next_move);
@@ -29,13 +30,13 @@ function AInextMove(){
         }
 
     //random selection, if theres more than one move wi the same value
-    console.log("is  " + available_moves.length);
+    //console.log("is  " + available_moves.length);
     
     if (best_moves.length > 1){
         var index = Math.floor(Math.random() * (best_moves.length - 1));
         max_move = best_moves[index];
     }
-
+    console.log("move  " + max_move.score);
     return max_move;
 }
 
@@ -58,18 +59,20 @@ function evaluate(board, kings){
     var AI_safe_sum = 0;
     var player_safe_sum = 0;
     var eval = 0;
+    var AI_in_danger = 0;
+    var player_in_danger = 0;
 
     for(let row in board){
         for(let col in board[row]){
             if(board[row][col] == 1){
                 AI_pieces++;
-                var tem = evaluate_position(col, row);
-                AI_safe_sum += tem;
+                AI_safe_sum += evaluate_position(col, row);
+                //AI_in_danger += in_danger(board, kings, 1, row, col);
             }
             else if(board[row][col] == 2){
                 player_pieces++;
-                var tem2 = evaluate_position(col, row);
-	            player_safe_sum += tem2;
+                player_safe_sum += evaluate_position(col, row);
+                //player_in_danger = in_danger(board, kings, 2, row, col);
             }
         }
     }
@@ -86,10 +89,10 @@ function evaluate(board, kings){
     }
     
     var avg_safe_diff = (AI_safe_sum / AI_pieces) - (player_safe_sum / player_pieces);
+    //+ (AI_in_danger/AI_pieces)-(player_in_danger/player_pieces)
+    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff) ;
     
-    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff);
-    
-    console.log("eval  " + eval);
+    //console.log("eval  " + eval);
     return eval;
 }
 
@@ -156,6 +159,31 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
     }
 }
 
+function in_danger(board, kings, player, row, col){
+    let opp = (player == 1 ? 2 : 1);
+    if (row == 0 || row == 7 || col == 0 || col == 7) {
+        //if stuck
+        if((row == 0 && col == 7)){
+            return 0;
+        } 
+        return 1;
+    }
+    else if ((board[parseInt(row) + 1][parseInt(col) - 1] == opp) && (board[parseInt(row) - 1][parseInt(col) + 1] == 0)) {
+        return 0;
+    }
+    else if ((board[parseInt(row) + 1][parseInt(col) + 1] == opp) && (board[parseInt(row) - 1][parseInt(col) - 1] == 0)) {
+        return 0;
+    }
+    if (isKing(opp, [parseInt(row) - 1,parseInt(col) + 1],kings) && (board[parseInt(row) + 1][parseInt(col) - 1] == 0) && (board[parseInt(row) - 1][parseInt(col) + 1] == opp) ) {
+        return 0;
+    }
+    else if (isKing(opp, [parseInt(row) - 1,parseInt(col) - 1],kings) && (board[parseInt(row) + 1][parseInt(col) + 1] == 0) && (board[parseInt(row) - 1][parseInt(col) - 1] == opp) ) {
+        return 0;
+    }
+    else {
+        return 5;
+    }
+}
 function inDanger_safe(board, player) {
     //count [inDanger, safe]
     let count = [0, 0];
@@ -411,9 +439,10 @@ function makeMoveAI(board, kings, move, player) {
 }
 
 function removeKing(kings, killedloc, player) {
-    for (let t in kings) {
-        if (t[0] == player && t[1] == killedloc[0] && t[2] == killedloc[1]) {
-            t[0] = 0;
+    for (let i = 0; i < kings.length; i++) {
+        if (kings[i][0] == player && kings[i][1] == killedloc[0] && kings[i][2] == killedloc[1]) {
+            kings[i][0] = 0;
+            //console.log("king dead");
             return;
         }
     }
@@ -425,6 +454,7 @@ function updateKingLoc(kings, player, pastlocation, nextlocation) {
         if ((kings[i][0] == player) && (kings[i][1] == pastlocation[0]) && (kings[i][2] == pastlocation[1])) {
             kings[i][1] = nextlocation[0];
             kings[i][2] = nextlocation[1];
+            //console.log("king moved");
             return;
         }
     }
