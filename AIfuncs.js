@@ -35,10 +35,12 @@ function AInextMove() {
     var alpha = NEG_INFINITY;
     var beta = INFINITY;
     var available_moves = findMovesAI(simulated_board, simulated_kings, 1);
-    var max = alpha_beta(simulated_board, simulated_kings, available_moves, 7, alpha, beta, 1);
+    console.log(available_moves.length);
+    var max_move = null;
+    if(available_moves.length > 1){
+        var max = alpha_beta(simulated_board, simulated_kings, available_moves, 7, alpha, beta, 1);
 
     //all moves that have max value
-    var max_move = null;
     var best_moves = [];
     var max_move = null;
     for (var i = 0; i < available_moves.length; i++) {
@@ -57,7 +59,11 @@ function AInextMove() {
         var index = Math.floor(Math.random() * (best_moves.length - 1));
         max_move = best_moves[index];
     }
-    // console.log("move  " + max_move.score);
+   
+
+    }
+    else max_move = available_moves[0];
+     // console.log("move  " + max_move.score);
     return max_move;
 }
 
