@@ -32,7 +32,7 @@ class Game {
 
             if (noMoreMoves(currBoard.board, currBoard.kingsList, 2)) {
                 this.winner = 1;
-                document.getElementById("winner").innerHTML = "Player 1 won!";
+                document.getElementById("winner").innerHTML = "Red won!";
                 this.display_winner();
                 return;
             }

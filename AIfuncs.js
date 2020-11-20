@@ -26,7 +26,7 @@ const positionValuesAI = [
     [4, 0, 4, 0, 5, 0, 5, 0]
 ];
 
-function AInextMove(){
+function AInextMove() {
 
     //cloning
     var simulated_board = JSON.parse(JSON.stringify(currBoard.board));
@@ -40,20 +40,20 @@ function AInextMove(){
     //all moves that have max value
     var max_move = null;
     var best_moves = [];
-        var max_move = null;
-        for(var i=0;i<available_moves.length;i++){
-            var next_move = available_moves[i];
-            
-            if (next_move.score == max){
-                max_move = next_move;
-                best_moves.push(next_move);
-            }
+    var max_move = null;
+    for (var i = 0; i < available_moves.length; i++) {
+        var next_move = available_moves[i];
+
+        if (next_move.score == max) {
+            max_move = next_move;
+            best_moves.push(next_move);
         }
+    }
 
     //random selection, if theres more than one move wi the same value
     //console.log("is  " + available_moves.length);
-    
-    if (best_moves.length > 1){
+
+    if (best_moves.length > 1) {
         var index = Math.floor(Math.random() * (best_moves.length - 1));
         max_move = best_moves[index];
     }
@@ -62,17 +62,67 @@ function AInextMove(){
 }
 
 
-function evaluate_position(x , y) {
-    if (x == 0 || x == 7 || y == 0 || y == 7){
+function evaluate_position(x, y) {
+    if (x == 0 || x == 7 || y == 0 || y == 7) {
         return 5;
     }
     else {
         return 3;
     }
 }
-//usign  15F
-function evaluate(board, kings){
-    
+
+// function evaluate(board, kings) { //usign  15F
+
+//     var AI_pieces = 0;
+//     var AI_kings = noKings(kings, 1);
+//     var player_pieces = 0;
+//     var player_kings = noKings(kings, 2);
+//     var AI_safe_sum = 0;
+//     var player_safe_sum = 0;
+//     var eval = 0;
+//     var AI_in_danger = 0;
+//     var player_in_danger = 0;
+//     AIScore = 0;
+//     playerScore = 0;
+
+//     for (let row in board) {
+//         for (let col in board[row]) {
+//             if (board[row][col] == 1) {
+//                 AI_pieces++;
+//                 AI_safe_sum += evaluate_position(col, row);
+//                 AIScore += positionValuesAI[row][col];
+//                 //AI_in_danger += in_danger(board, kings, 1, row, col);
+//             }
+//             else if (board[row][col] == 2) {
+//                 player_pieces++;
+//                 player_safe_sum += evaluate_position(col, row);
+//                 playerScore += positionValuesPlayer[row][col];
+//                 //player_in_danger = in_danger(board, kings, 2, row, col);
+//             }
+//         }
+//     }
+
+//     var piece_diff = (AI_pieces - player_pieces);
+//     var king_diff = (AI_kings - player_kings);
+
+//     if (player_pieces === 0) {
+//         player_pieces = 0.00001;
+//     }
+
+//     if (AI_pieces === 0) {
+//         AI_pieces = 0.00001;
+//     }
+
+//     var avg_safe_diff = (AI_safe_sum / AI_pieces) - (player_safe_sum / player_pieces);
+//     //+ (AI_in_danger/AI_pieces)-(player_in_danger/player_pieces)
+//     eval = (100 * piece_diff) + (10 * king_diff) + (avg_safe_diff) + 100 * (AIScore - playerScore);
+
+//     console.log("eval  " + eval);
+//     return eval;
+// }
+
+function evaluate(board, kings) {
+
     var AI_pieces = 0;
     var AI_kings = noKings(kings, 1);
     var player_pieces = 0;
@@ -82,22 +132,24 @@ function evaluate(board, kings){
     var eval = 0;
     var AI_in_danger = 0;
     var player_in_danger = 0;
-    AIScore =0;
-    playerScore =0;
+    AIScore = 0;
+    playerScore = 0;
 
-    for(let row in board){
-        for(let col in board[row]){
-            if(board[row][col] == 1){
+    for (let row in board) {
+        for (let col in board[row]) {
+            if (board[row][col] == 1) {
                 AI_pieces++;
-                AI_safe_sum += evaluate_position(col, row);
-                AIScore += positionValuesAI[row][col] ;
-                //AI_in_danger += in_danger(board, kings, 1, row, col);
+                // AI_safe_sum += evaluate_position(col, row);
+                // AIScore += positionValuesAI[row][col];
+                AI_safe_sum += safeAndMayKill(board, kings, 1, row, col);
+                AI_in_danger += in_danger(board, kings, 1, row, col);
             }
-            else if(board[row][col] == 2){
+            else if (board[row][col] == 2) {
                 player_pieces++;
-                player_safe_sum += evaluate_position(col, row);
-                playerScore += positionValuesPlayer[row][col];
-                //player_in_danger = in_danger(board, kings, 2, row, col);
+                // player_safe_sum += evaluate_position(col, row);
+                // playerScore += positionValuesPlayer[row][col];
+                player_safe_sum = safeAndMayKill(board, kings, 2, row, col);
+                player_in_danger = in_danger(board, kings, 2, row, col);
             }
         }
     }
@@ -105,24 +157,25 @@ function evaluate(board, kings){
     var piece_diff = (AI_pieces - player_pieces);
     var king_diff = (AI_kings - player_kings);
 
-    if (player_pieces === 0){
-        player_pieces = 0.00001;
-    }
-    
-    if (AI_pieces === 0) {
-        AI_pieces = 0.00001;
-    }
-    
-    var avg_safe_diff = (AI_safe_sum / AI_pieces) - (player_safe_sum / player_pieces);
-    //+ (AI_in_danger/AI_pieces)-(player_in_danger/player_pieces)
-    eval = (100*piece_diff) + (10*king_diff) + (avg_safe_diff) + 100*(AIScore-playerScore);
-    
-    //console.log("eval  " + eval);
+    // if (player_pieces === 0) {
+    //     player_pieces = 0.00001;
+    // }
+
+    // if (AI_pieces === 0) {
+    //     AI_pieces = 0.00001;
+    // }
+
+    var avg_safe_diff = ((AI_safe_sum) - (player_safe_sum)) + 5*((AI_in_danger) - (player_in_danger));
+
+    eval = (10 * piece_diff) + (8 * king_diff) + (20 * avg_safe_diff);      //+ 100 * (AIScore - playerScore);
+
+    // console.log("eval:  " + eval);
     return eval;
 }
 
+
 //function findmoves not implemented yet
-function alpha_beta(board, kings, moves, depth, alpha, beta, player){
+function alpha_beta(board, kings, moves, depth, alpha, beta, player) {
     //make move
     //board is a list of the piece 0 1 2
     //kings row hold [player, [row,col]]
@@ -132,16 +185,16 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
     }
     simulated_board = JSON.parse(JSON.stringify(board));
     simulated_kings = JSON.parse(JSON.stringify(kings));
-    if(player == 1){
+    if (player == 1) {
         var max = NEG_INFINITY;
-        for (var i=0;i<moves.length;i++){
+        for (var i = 0; i < moves.length; i++) {
             //move computer piece
             var AI_move = moves[i];
             makeMoveAI(simulated_board, simulated_kings, AI_move, 1);
             //get available moves for human
             var player_moves = findMovesAI(simulated_board, simulated_kings, 2);
             //get min value for this move
-            var min_score = alpha_beta(simulated_board, simulated_kings, player_moves, depth-1, alpha, beta, 2);
+            var min_score = alpha_beta(simulated_board, simulated_kings, player_moves, depth - 1, alpha, beta, 2);
             moves[i].score = min_score;
             //compare to min and update, if necessary
             if (min_score > max) {
@@ -156,9 +209,9 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
         }
         return max;
     }
-    else if(player == 2){
+    else if (player == 2) {
         var min = INFINITY;
-        for (var i=0;i<moves.length;i++){
+        for (var i = 0; i < moves.length; i++) {
             //move human piece
             var player_move = moves[i];
             makeMoveAI(simulated_board, simulated_kings, player_move, 2);
@@ -167,7 +220,7 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
             var AI_moves = findMovesAI(simulated_board, simulated_kings, 1);
 
             //get max value for this move
-            var max_score = alpha_beta(simulated_board, simulated_kings, AI_moves, depth-1, alpha, beta, 1);
+            var max_score = alpha_beta(simulated_board, simulated_kings, AI_moves, depth - 1, alpha, beta, 1);
 
             //compare to min and update, if necessary
             if (max_score < min) {
@@ -185,31 +238,174 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player){
     }
 }
 
-function in_danger(board, kings, player, row, col){
-    let opp = (player == 1 ? 2 : 1);
+// function in_danger(board, kings, player, row, col) {
+//     let opp = (player == 1 ? 2 : 1);
+//     if (row == 0 || row == 7 || col == 0 || col == 7) {
+//         //if stuck
+//         if ((row == 0 && col == 7)) {
+//             return 0;
+//         }
+//         return 1;
+//     }
+//     else if ((board[parseInt(row) + 1][parseInt(col) - 1] == opp) && (board[parseInt(row) - 1][parseInt(col) + 1] == 0)) {
+//         return 0;
+//     }
+//     else if ((board[parseInt(row) + 1][parseInt(col) + 1] == opp) && (board[parseInt(row) - 1][parseInt(col) - 1] == 0)) {
+//         return 0;
+//     }
+//     if (isKing(opp, [parseInt(row) - 1, parseInt(col) + 1], kings) && (board[parseInt(row) + 1][parseInt(col) - 1] == 0)
+//         && (board[parseInt(row) - 1][parseInt(col) + 1] == opp)) {
+//         return 0;
+//     }
+//     else if (isKing(opp, [parseInt(row) - 1, parseInt(col) - 1], kings) && (board[parseInt(row) + 1][parseInt(col) + 1] == 0)
+//         && (board[parseInt(row) - 1][parseInt(col) - 1] == opp)) {
+//         return 0;
+//     }
+//     else {
+//         return 5;
+//     }
+// }
+
+function in_danger(board, kings, player, row, col) {
+
     if (row == 0 || row == 7 || col == 0 || col == 7) {
         //if stuck
-        if((row == 0 && col == 7)){
+        if ((row == 0 && col == 7)) {
             return 0;
-        } 
+        }
         return 1;
     }
-    else if ((board[parseInt(row) + 1][parseInt(col) - 1] == opp) && (board[parseInt(row) - 1][parseInt(col) + 1] == 0)) {
-        return 0;
+    x = parseInt(row);
+    y = parseInt(col);
+
+    if (player == 1) {    // red
+
+        if ((board[x + 1][y - 1] == 2) && (board[x - 1][y + 1] == 0)) {
+            // - - 0 
+            // - 1 -
+            // 2 - -
+            return 3;
+        }
+        else if ((board[x + 1][y + 1] == 2) && (board[x - 1][y - 1] == 0)) {
+            // 0 - - 
+            // - 1 -
+            // - - 2
+            return 3;
+        }
+        else if (isKing(2, [x - 1, y - 1], kings) && (board[x - 1][y - 1] == 2) && (board[x + 1][y + 1] == 0)) {
+            // 2* -  - 
+            // -  1  -
+            // -  -  0
+            return 4;
+        }
+        else if (isKing(2, [x - 1, y + 1], kings) && (board[x - 1][y + 1] == 2) && (board[x + 1][y - 1] == 0)) {
+            // -  -  2* 
+            // -  1  -
+            // 0  -  -
+            return 4;
+        }
+
     }
-    else if ((board[parseInt(row) + 1][parseInt(col) + 1] == opp) && (board[parseInt(row) - 1][parseInt(col) - 1] == 0)) {
-        return 0;
+    else if (player == 2) {   // blue
+
+        if ((board[x - 1][y + 1] == 1) && (board[x + 1][y - 1] == 0)) {
+            // - - 1 
+            // - 2 -
+            // 0 - -
+            return 3;
+        }
+        else if ((board[x - 1][y - 1] == 1) && (board[x + 1][y + 1] == 0)) {
+            // 1 - - 
+            // - 2 -
+            // - - 0
+            return 3;
+        }
+        else if (isKing(1, [x + 1, y + 1], kings) && (board[x + 1][y + 1] == 1) && (board[x - 1][y - 1] == 0)) {
+            // 0  -  - 
+            // -  2  -
+            // -  -  1*
+            return 4;
+        }
+        else if (isKing(1, [x + 1, y - 1], kings) && (board[x + 1][y - 1] == 1) && (board[x - 1][y + 1] == 0)) {
+            // -  -  0 
+            // -  2  -
+            // 1* -  -
+            return 4;
+        }
+
     }
-    if (isKing(opp, [parseInt(row) - 1,parseInt(col) + 1],kings) && (board[parseInt(row) + 1][parseInt(col) - 1] == 0) && (board[parseInt(row) - 1][parseInt(col) + 1] == opp) ) {
-        return 0;
-    }
-    else if (isKing(opp, [parseInt(row) - 1,parseInt(col) - 1],kings) && (board[parseInt(row) + 1][parseInt(col) + 1] == 0) && (board[parseInt(row) - 1][parseInt(col) - 1] == opp) ) {
-        return 0;
-    }
-    else {
-        return 5;
-    }
+
 }
+
+function safeAndMayKill(board, kings, player, row, col) {
+
+    if (row == 0 || row == 7 || col == 0 || col == 7) {
+        //if stuck
+        if ((row == 0 && col == 7)) {
+            return 3;
+        }
+        return 2;
+    }
+    x = parseInt(row);
+    y = parseInt(col);
+
+    if (player == 1) {    // red
+
+        if ((board[x - 1][y - 1] == 1) && (board[x - 1][y + 1] == 1)) { // super safe
+            // 1 - 1 
+            // - 1 -
+            // x - x
+            return 6;
+        }
+        else if ((board[x - 1][y - 1] == 1) && (board[x + 1][y - 1] == 0)) { // safe
+            // 1 - - 
+            // - 1 -
+            // 0 - x
+            return 4;
+        }
+        else if ((board[x - 1][y + 1] == 1) && (board[x + 1][y + 1] == 0)) { // safe
+            // - - 1 
+            // - 1 -
+            // x - 0
+            return 4;
+        }
+
+    }
+    else if (player == 2) {   // blue
+
+        if ((board[x + 1][y - 1] == 2) && (board[x + 1][y + 1] == 2)) { // super safe
+            // x - x 
+            // - 2 -
+            // 2 - 2
+            return 6;
+        }
+        else if ((board[x + 1][y - 1] == 2) && (board[x - 1][y - 1] == 0)) { // safe
+            // 0 - x 
+            // - 2 -
+            // 2 - -
+            return 4;
+        }
+        else if ((board[x + 1][y + 1] == 2) && (board[x - 1][y + 1] == 0)) { // safe
+            // x - 0 
+            // - 2 -
+            // - - 2
+            return 4;
+        }
+    }
+
+    // if (isKing(opp, [x - 1, y + 1], kings) && (board[x + 1][y - 1] == 0)
+    //     && (board[x - 1][y + 1] == opp)) {
+    //     return 0;
+    // }
+    // else if (isKing(opp, [x - 1, y - 1], kings) && (board[x + 1][y + 1] == 0)
+    //     && (board[x - 1][y - 1] == opp)) {
+    //     return 0;
+    // }
+    // else {
+    //     return 5;
+    // }
+}
+
 function inDanger_safe(board, player) {
     //count [inDanger, safe]
     let count = [0, 0];
@@ -284,18 +480,18 @@ function noKings(kings, player) {
 }
 
 
-function noMoreMoves(board, kings, player){
-    if(findMovesAI(board, kings, player).length == 0){
+function noMoreMoves(board, kings, player) {
+    if (findMovesAI(board, kings, player).length == 0) {
         return true;
     }
     return false;
 
 }
 
-function isKing(player, loc, kings){
-    for(let i = 0; i < kings.length ; i++){
-        if (kings[i][0] == player){
-            if((kings[i][1] == loc[0]) && (kings[i][2] == loc[1])){
+function isKing(player, loc, kings) {
+    for (let i = 0; i < kings.length; i++) {
+        if (kings[i][0] == player) {
+            if ((kings[i][1] == loc[0]) && (kings[i][2] == loc[1])) {
                 return true;
             }
         }
@@ -347,8 +543,8 @@ function findMovesAI(board, kings, player) {
                 }
 
                 //two additional direction up right and up left 
-                
-                if((player == 2) || kingFlag){
+
+                if ((player == 2) || kingFlag) {
                     //moving up left
                     if (col > 0 && row > 0) {
                         if (board[parseInt(row) - 1][parseInt(col) - 1] == 0) {
@@ -396,7 +592,7 @@ function findMovesAI(board, kings, player) {
 
     if (flag) {
         // console.log("jumps: " + finalMvs[0].pastlocation + " to "+ finalMvs[0].nextlocation);
-        if(finalMvs[0].jump) console.log("last loc: "+finalMvs[0].pastlocation+"    next loc: "+finalMvs[0].nextlocation);
+        if (finalMvs[0].jump) console.log("last loc: " + finalMvs[0].pastlocation + "    next loc: " + finalMvs[0].nextlocation);
         return finalMvs;
     }
     return mvs;
@@ -497,11 +693,11 @@ function findMovePlayer(locC, locT, temMvs) {
 
 }
 
-function isValidMove(locC, locT, temMvs){
-    for(let i = 0; i < temMvs.length ; i++){
-        if((temMvs[i].pastlocation[0] == locC[0]) && (temMvs[i].pastlocation[1] == locC[1]) && 
-            (temMvs[i].nextlocation[0] == locT[0]) && (temMvs[i].nextlocation[1] == locT[1])){
-                return true;
+function isValidMove(locC, locT, temMvs) {
+    for (let i = 0; i < temMvs.length; i++) {
+        if ((temMvs[i].pastlocation[0] == locC[0]) && (temMvs[i].pastlocation[1] == locC[1]) &&
+            (temMvs[i].nextlocation[0] == locT[0]) && (temMvs[i].nextlocation[1] == locT[1])) {
+            return true;
         }
 
     }
