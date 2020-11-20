@@ -86,7 +86,25 @@ class Game {
         
         console.log("turn" + this.turn);
         this.thinking = true;
-        let tem = AInextMove();
+        let tem = null;
+        if(this.isDoubleMode){
+            console.log("it's dpuble AI");
+            let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
+            console.log(temMvs.length);
+            console.log(this.selectedCheckerLocation[0] + " " + this.selectedCheckerLocation[1]);
+            for (let i = 0; i < temMvs.length; i++) {   
+                if ((temMvs[i].pastlocation[0] == this.selectedCheckerLocation[0]) && (temMvs[i].pastlocation[1] == this.selectedCheckerLocation[1])) {
+                    console.log("AI double");
+                    tem = temMvs[i];
+                    break;
+                }
+            }
+
+        }
+        else{
+            console.log("not double AI");
+            tem = AInextMove();
+        }
         if(tem.jump) console.log("last loc: "+tem.pastlocation+"    next loc: "+tem.nextlocation);
 
         tem.findTilesANDCheckers();
