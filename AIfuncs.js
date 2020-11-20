@@ -57,7 +57,7 @@ function AInextMove() {
         var index = Math.floor(Math.random() * (best_moves.length - 1));
         max_move = best_moves[index];
     }
-    console.log("move  " + max_move.score);
+    // console.log("move  " + max_move.score);
     return max_move;
 }
 
@@ -142,39 +142,27 @@ function evaluate(board, kings) {
                 // AI_safe_sum += evaluate_position(col, row);
                 // AIScore += positionValuesAI[row][col];
                 AI_safe_sum += safeAndMayKill(board, kings, 1, row, col);
-                AI_in_danger += in_danger(board, kings, 1, row, col);
+                AI_in_danger += inDanger(board, kings, 1, row, col);
             }
             else if (board[row][col] == 2) {
                 player_pieces++;
                 // player_safe_sum += evaluate_position(col, row);
                 // playerScore += positionValuesPlayer[row][col];
                 player_safe_sum = safeAndMayKill(board, kings, 2, row, col);
-                player_in_danger = in_danger(board, kings, 2, row, col);
+                player_in_danger = inDanger(board, kings, 2, row, col);
             }
         }
     }
 
     var piece_diff = (AI_pieces - player_pieces);
     var king_diff = (AI_kings - player_kings);
+    var avg_safe_diff = ((AI_safe_sum) - (player_safe_sum)) - 3*((AI_in_danger) - (player_in_danger));
 
-    // if (player_pieces === 0) {
-    //     player_pieces = 0.00001;
-    // }
+    eval = (10 * piece_diff) + (8 * king_diff) + (20 * avg_safe_diff);
 
-    // if (AI_pieces === 0) {
-    //     AI_pieces = 0.00001;
-    // }
-
-    var avg_safe_diff = ((AI_safe_sum) - (player_safe_sum)) + 5*((AI_in_danger) - (player_in_danger));
-
-    eval = (10 * piece_diff) + (8 * king_diff) + (20 * avg_safe_diff);      //+ 100 * (AIScore - playerScore);
-
-    // console.log("eval:  " + eval);
     return eval;
 }
 
-
-//function findmoves not implemented yet
 function alpha_beta(board, kings, moves, depth, alpha, beta, player) {
     //make move
     //board is a list of the piece 0 1 2
@@ -266,7 +254,7 @@ function alpha_beta(board, kings, moves, depth, alpha, beta, player) {
 //     }
 // }
 
-function in_danger(board, kings, player, row, col) {
+function inDanger(board, kings, player, row, col) {
 
     if (row == 0 || row == 7 || col == 0 || col == 7) {
         //if stuck
@@ -393,17 +381,6 @@ function safeAndMayKill(board, kings, player, row, col) {
         }
     }
 
-    // if (isKing(opp, [x - 1, y + 1], kings) && (board[x + 1][y - 1] == 0)
-    //     && (board[x - 1][y + 1] == opp)) {
-    //     return 0;
-    // }
-    // else if (isKing(opp, [x - 1, y - 1], kings) && (board[x + 1][y + 1] == 0)
-    //     && (board[x - 1][y - 1] == opp)) {
-    //     return 0;
-    // }
-    // else {
-    //     return 5;
-    // }
 }
 
 function inDanger_safe(board, player) {
