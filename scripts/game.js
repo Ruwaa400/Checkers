@@ -88,7 +88,7 @@ class Game {
         this.thinking = true;
         let tem = null;
         if(this.isDoubleMode){
-            console.log("it's dpuble AI");
+            console.log("it's double AI");
             let temMvs = findMovesAI(currBoard.board, currBoard.kingsList, this.turn);
             console.log(temMvs.length);
             console.log(this.selectedCheckerLocation[0] + " " + this.selectedCheckerLocation[1]);

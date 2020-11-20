@@ -38,7 +38,7 @@ function AInextMove() {
     console.log(available_moves.length);
     var max_move = null;
     if(available_moves.length > 1){
-        var max = alpha_beta(simulated_board, simulated_kings, available_moves, 7, alpha, beta, 1);
+        var max = alpha_beta(simulated_board, simulated_kings, available_moves, 9, alpha, beta, 1);
 
     //all moves that have max value
     var best_moves = [];
